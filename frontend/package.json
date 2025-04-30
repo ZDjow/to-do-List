@@ -10,13 +10,11 @@
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.3",
     "@mui/styled-engine-sc": "^5.12.0",
-    "graphql": "^15.4.0",
-    "react": "18",
-    "react-dom": "18",
+    "graphql": "^16.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "styled-components": "^6.0.7",
-    "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1"
+    "styled-components": "^6.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -30,8 +28,8 @@
     ]
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "browserslist": {
     "production": [

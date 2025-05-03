@@ -7,16 +7,19 @@ import {
   UPDATE_ITEM_MUTATION,
   DELETE_ITEM_MUTATION,
 } from "../services/queries";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import ToDoList from "../components/ToDoList";
+import DeleteIcon from "@mui/icons-material/Delete"; // Importa o ícone de exclusão
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
+  const [filterValue, setFilterValue] = useState(""); // Novo estado para o filtro
   const [editingItem, setEditingItem] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
-    variables: { filter: { name: inputValue } },
+    variables: { filter: { name: filterValue } },
   });
 
   const [addItem] = useMutation(ADD_ITEM_MUTATION, {
@@ -48,12 +51,14 @@ export default function Home() {
 
   const handleFilter = () => {
     setErrorMessage("");
+    setFilterValue(inputValue);
     refetch({ filter: { name: inputValue } });
   };
 
   const handleDeleteItem = async (id) => {
     try {
       await deleteItem({ variables: { id } });
+      refetch(); // Atualiza a lista de tarefas após excluir
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -81,43 +86,131 @@ export default function Home() {
     }
   };
 
+  const handleDeleteAll = async () => {
+    try {
+      // Percorre todas as tarefas e exclui uma por uma
+      if (data?.todoList?.length > 0) {
+        for (const item of data.todoList) {
+          await deleteItem({ variables: { id: item.id } });
+        }
+        refetch(); // Atualiza a lista após excluir todas
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
   return (
-    <div style={{ padding: "20px", backgroundColor: "rgba(0, 0, 0, 0.7)" }}>
-      <h1 style={{ color: "white" }}>Lista de tarefas</h1>
-      <div style={{ marginBottom: "20px" }}>
+    <div
+      style={{
+        padding: "20px",
+        backgroundColor: "rgb(64, 64, 69)",
+        borderRadius: "10px",
+        maxWidth: "600px",
+        margin: "auto",
+        width: "100%",
+      }}
+    >
+      {/* Logo da UNO */}
+      <img
+        src="https://raw.githubusercontent.com/ZDjow/Uno-Solucoes/refs/heads/master/frontend/public/uno-logo.png" // Caminho para a logo
+        alt="Logo UNO"
+        style={{
+          width: "100px", // Ajuste o tamanho da logo
+          marginBottom: "10px",
+        }}
+      />
+      <h1 style={{ color: "white", fontSize: "23px", marginBottom: "5px" }}>
+        LISTA DE TAREFAS
+      </h1>
+      <div
+        style={{
+          /*backgroundColor: "rgb(125, 125, 125)",*/
+          backgroundColor: "rgb(200, 200, 200)",
+          padding: "10px",
+          borderRadius: "5px",
+        }}
+      >
+        {/* Campo de texto */}
         <TextField
-          label="Adicionar ou Filtrar tarefas"
+          label="Adicionar ou procurar tarefas"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleAddItem(); // Salva o item ao pressionar Enter
+            }
+          }}
+          variant="standard"
           style={{
-            marginRight: "10px",
-            backgroundColor: "white",
-            borderRadius: "5px",
+            width: "100%",
+            marginBottom: "10px",
           }}
         />
-        <Button
-          variant="contained"
-          style={{
-            marginRight: "10px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-          }}
-          onClick={handleAddItem}
-        >
-          Adicionar
-        </Button>
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: "#2196F3",
-            color: "white",
-          }}
-          onClick={handleFilter}
-        >
-          Filtrar
-        </Button>
+        {/* Botões */}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#4CAF50",
+              color: "white",
+              flex: 1,
+              marginRight: "10px",
+            }}
+            onClick={handleAddItem}
+          >
+            ADD
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#2196F3",
+              color: "white",
+              flex: 1,
+              marginRight: "10px",
+            }}
+            onClick={handleFilter}
+          >
+            Buscar
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              width: "8%",
+              minWidth: "40px",
+              color: "white",
+              backgroundColor: "rgb(125, 125, 125)",
+              "&:hover": {
+                backgroundColor: "rgb(64, 64, 69)",
+              },
+            }}
+            color="grey"
+            onClick={() => {
+              setInputValue(""); // Limpa o campo de texto
+              setErrorMessage(""); // Limpa mensagens de erro
+              refetch({ filter: { name: "" } }); // Reseta o filtro
+            }}
+          >
+            <FilterAltOffIcon /> {/* Ícone do botão */}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              width: "8%", // Mesmo tamanho do botão de "Limpar Filtro"
+              minWidth: "40px",
+              color: "white",
+              backgroundColor: "rgb(125, 125, 125)", // Mesma cor do botão de "Limpar Filtro"
+              "&:hover": {
+                backgroundColor: "rgb(64, 64, 69)", // Mesma cor ao passar o mouse
+              },
+              marginLeft: "10px", // Espaçamento entre os botões
+            }}
+            onClick={handleDeleteAll} // Chama a função para excluir todas as tarefas
+          >
+            <DeleteIcon /> {/* Ícone de exclusão */}
+          </Button>
+        </div>
       </div>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       <ToDoList
         data={data}
         onDelete={handleDeleteItem}

@@ -24,7 +24,7 @@ function validateNameIsUnique(name, list, excludeId = null) {
   );
 
   if (nameExists) {
-    throw new Error(`A clínica "${name}" já foi pré-cadastrada.`);
+    throw new Error(`A tarefa "${name}" já consta na lista.`);
   }
 }
 

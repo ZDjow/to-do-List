@@ -19,18 +19,30 @@ export default function ToDoList({
   error,
 }) {
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "rgb(200, 200, 200)", // Fundo claro
+        padding: "10px",
+        borderRadius: "5px",
+        marginTop: "10px", // Espaço entre a lista e o formulário
+      }}
+    >
       <ErrorMessage error={error} />
-      <List sx={{ width: "100%" }}>
+      <List
+        sx={{
+          width: "100%",
+          color: "rgb(64, 64, 69)", // Texto cinza escuro
+        }}
+      >
         {data?.todoList?.length === 0 ? (
           <div
             style={{
               textAlign: "center",
               fontSize: "15px",
-              color: "rgb(64, 64, 69)",
+              color: "rgb(64, 64, 69)", // Texto cinza escuro
             }}
           >
-            Nenhum registro encontrado.
+            Sem tarefas no momento.
           </div>
         ) : (
           data?.todoList?.map((value) => {

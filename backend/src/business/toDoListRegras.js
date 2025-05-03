@@ -41,11 +41,11 @@ function updateItem(id, name) {
 
   const itemIndex = TODO_LIST.findIndex((item) => item.id === id);
   if (itemIndex === -1) {
-    throw new Error(`Edição cancelada por não existir clínica com o ID ${id}.`);
+    throw new Error(`Edição cancelada por não existir tarefa com o ID ${id}.`);
   }
 
   TODO_LIST[itemIndex].name = name;
-  console.log(`Clínica com o ID ${id} atualizada para: ${name}`);
+  console.log(`Tarefa com o ID ${id} atualizada para: ${name}`);
   return true;
 }
 
@@ -57,11 +57,11 @@ function updateItem(id, name) {
 function deleteItem(id) {
   const index = TODO_LIST.findIndex((item) => item.id === id);
   if (index === -1) {
-    throw new Error(`A clínica com o ID ${id} não foi encontrada.`);
+    throw new Error(`A tarefa com o ID ${id} não foi encontrada.`);
   }
 
   TODO_LIST.splice(index, 1);
-  console.log(`A clínica com o ID ${id} foi removida da lista.`);
+  console.log(`A tarefa com o ID ${id} foi removida da lista.`);
   return true;
 }
 

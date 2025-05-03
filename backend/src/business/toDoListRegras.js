@@ -79,9 +79,28 @@ function filterItems(filter) {
   return TODO_LIST;
 }
 
+/**
+ * Alterna o status de conclusão de um item.
+ * @param {number} id - ID do item a ser alternado.
+ * @returns {boolean} - Retorna true se o status for alterado com sucesso.
+ */
+function toggleComplete(id) {
+  const item = TODO_LIST.find((item) => item.id === id);
+  if (!item) {
+    throw new Error(`A tarefa com o ID ${id} não foi encontrada.`);
+  }
+
+  item.completed = !item.completed; // Alterna o status de conclusão
+  console.log(
+    `O status da tarefa com o ID ${id} foi alterado para: ${item.completed}`
+  );
+  return true;
+}
+
 module.exports = {
   addItem,
   updateItem,
   deleteItem,
   filterItems,
+  toggleComplete,
 };

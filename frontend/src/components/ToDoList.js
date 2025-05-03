@@ -17,6 +17,7 @@ export default function ToDoList({
   editingText,
   setEditingText,
   error,
+  onToggleComplete, // Adicione esta linha para receber a prop
 }) {
   return (
     <div
@@ -58,6 +59,7 @@ export default function ToDoList({
                 startEditing={startEditing}
                 saveEditing={saveEditing}
                 onDelete={onDelete}
+                onToggleComplete={onToggleComplete} // Passa a função para alternar o status
               />
             );
           })

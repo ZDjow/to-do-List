@@ -16,6 +16,7 @@ export default function ToDoListItem({
   startEditing,
   saveEditing,
   onDelete,
+  onToggleComplete, // Função para alternar o status
 }) {
   return (
     <ListItem
@@ -24,9 +25,27 @@ export default function ToDoListItem({
         borderRadius: "5px",
         marginTop: "5px",
         marginBottom: "5px",
+        textDecoration: value.completed ? "line-through" : "none", // Aplica o estilo riscado
+        color: value.completed ? "gray" : "inherit", // Altera a cor do texto se concluído
       }}
     >
       <ListItemButton dense>
+        {/* Botão de alternar conclusão */}
+        <IconButton
+          onClick={() => onToggleComplete(value.id)}
+          sx={{
+            border: "2px solid gray", // Borda da bolinha
+            borderRadius: "50%", // Forma circular
+            width: "13px",
+            height: "13px",
+            padding: "0px",
+            marginRight: "7px",
+            backgroundColor: value.completed ? "gray" : "transparent", // Fundo preenchido se concluído
+            "&:hover": {
+              backgroundColor: value.completed ? "darkgray" : "lightgray", // Efeito hover
+            },
+          }}
+        />
         {isEditing ? (
           <TextField
             value={editingText}

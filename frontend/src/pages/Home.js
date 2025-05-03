@@ -10,6 +10,7 @@ import {
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import ToDoList from "../components/ToDoList";
 import DeleteIcon from "@mui/icons-material/Delete"; // Importa o ícone de exclusão
+import { TOGGLE_COMPLETE_MUTATION } from "../services/queries"; // Importa a nova mutação
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
@@ -31,6 +32,10 @@ export default function Home() {
   });
 
   const [deleteItem] = useMutation(DELETE_ITEM_MUTATION, {
+    refetchQueries: [{ query: GET_TODO_LIST }],
+  });
+
+  const [toggleComplete] = useMutation(TOGGLE_COMPLETE_MUTATION, {
     refetchQueries: [{ query: GET_TODO_LIST }],
   });
 
@@ -95,6 +100,15 @@ export default function Home() {
         }
         refetch(); // Atualiza a lista após excluir todas
       }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handleToggleComplete = async (id) => {
+    try {
+      await toggleComplete({ variables: { id } });
+      refetch(); // Atualiza a lista após alternar o status
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -220,6 +234,7 @@ export default function Home() {
         editingText={editingText}
         setEditingText={setEditingText}
         error={errorMessage}
+        onToggleComplete={handleToggleComplete} // Passa a função para alternar o status
       />
     </div>
   );

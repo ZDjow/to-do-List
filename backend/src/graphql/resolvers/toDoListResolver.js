@@ -3,6 +3,7 @@ const {
   updateItem,
   deleteItem,
   filterItems,
+  toggleComplete,
 } = require("../../business/toDoListRegras");
 
 const resolvers = {
@@ -14,6 +15,7 @@ const resolvers = {
     addItem: (_, { values: { name } }) => addItem(name),
     updateItem: (_, { values: { id, name } }) => updateItem(id, name),
     deleteItem: (_, { id }) => deleteItem(id),
+    toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para alternar o status
   },
 };
 

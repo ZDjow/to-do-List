@@ -6,6 +6,7 @@ export const GET_TODO_LIST = gql`
     todoList(filter: $filter) {
       id
       name
+      completed
     }
   }
 `;
@@ -26,5 +27,11 @@ export const UPDATE_ITEM_MUTATION = gql`
 export const DELETE_ITEM_MUTATION = gql`
   mutation deleteItem($id: Int!) {
     deleteItem(id: $id)
+  }
+`;
+
+export const TOGGLE_COMPLETE_MUTATION = gql`
+  mutation toggleComplete($id: Int!) {
+    toggleComplete(id: $id)
   }
 `;

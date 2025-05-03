@@ -30,6 +30,20 @@ export default function ToDoListItem({
       }}
     >
       <ListItemButton dense>
+        <IconButton
+          sx={{
+            width: "13px",
+            height: "13px",
+            padding: "0px",
+            marginRight: "7px",
+            backgroundColor:
+              value.priority === "low"
+                ? "green"
+                : value.priority === "medium"
+                ? "yellow"
+                : "red", // Define a cor de fundo com base na prioridade
+          }}
+        />
         {/* Botão de alternar conclusão */}
         <IconButton
           onClick={() => onToggleComplete(value.id)}

@@ -11,9 +11,11 @@ import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import ToDoList from "../components/ToDoList";
 import DeleteIcon from "@mui/icons-material/Delete"; // Importa o ícone de exclusão
 import { TOGGLE_COMPLETE_MUTATION } from "../services/queries"; // Importa a nova mutação
+import { IconButton } from "@mui/material";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
+  const [priority, setPriority] = useState("low"); // Estado para a prioridade
   const [filterValue, setFilterValue] = useState(""); // Novo estado para o filtro
   const [editingItem, setEditingItem] = useState(null);
   const [editingText, setEditingText] = useState("");
@@ -45,8 +47,9 @@ export default function Home() {
         setErrorMessage("O nome da tarefa não pode estar vazio.");
         return;
       }
-      await addItem({ variables: { name: inputValue } });
+      await addItem({ variables: { name: inputValue, priority } }); // Inclui a prioridade
       setInputValue("");
+      setPriority("low"); // Reseta a prioridade para o padrão
       setErrorMessage("");
       refetch();
     } catch (error) {
@@ -139,10 +142,11 @@ export default function Home() {
       </h1>
       <div
         style={{
-          /*backgroundColor: "rgb(125, 125, 125)",*/
           backgroundColor: "rgb(200, 200, 200)",
           padding: "10px",
           borderRadius: "5px",
+          position: "relative", // Permite posicionar os botões dentro do campo
+          marginBottom: "10px",
         }}
       >
         {/* Campo de texto */}
@@ -161,6 +165,48 @@ export default function Home() {
             marginBottom: "10px",
           }}
         />
+        {/* Botões de prioridade */}
+        <div
+          style={{
+            position: "absolute",
+            top: "37%", // Centraliza verticalmente em relação ao campo de texto
+            right: "13px", // Posiciona os botões no canto direito
+            transform: "translateY(-50%)", // Ajusta o alinhamento vertical
+            display: "flex",
+            gap: "5px", // Espaçamento entre os botões
+          }}
+        >
+          <IconButton
+            onClick={() => setPriority("low")}
+            sx={{
+              border: "2px solid green",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              backgroundColor: priority === "low" ? "green" : "transparent",
+            }}
+          />
+          <IconButton
+            onClick={() => setPriority("medium")}
+            sx={{
+              border: "2px solid yellow",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              backgroundColor: priority === "medium" ? "yellow" : "transparent",
+            }}
+          />
+          <IconButton
+            onClick={() => setPriority("high")}
+            sx={{
+              border: "2px solid red",
+              borderRadius: "50%",
+              width: "20px",
+              height: "20px",
+              backgroundColor: priority === "high" ? "red" : "transparent",
+            }}
+          />
+        </div>
         {/* Botões */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button

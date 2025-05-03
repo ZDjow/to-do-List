@@ -7,14 +7,14 @@ export const GET_TODO_LIST = gql`
       id
       name
       completed
+      priority
     }
   }
 `;
 
 export const ADD_ITEM_MUTATION = gql`
-  mutation addItem($name: String!) {
-    #Simplificado com o name, até para se ter um padrão.
-    addItem(values: { name: $name })
+  mutation addItem($name: String!, $priority: String!) {
+    addItem(values: { name: $name, priority: $priority })
   }
 `;
 
@@ -33,5 +33,11 @@ export const DELETE_ITEM_MUTATION = gql`
 export const TOGGLE_COMPLETE_MUTATION = gql`
   mutation toggleComplete($id: Int!) {
     toggleComplete(id: $id)
+  }
+`;
+
+export const SET_PRIORITY_MUTATION = gql`
+  mutation setPriority($id: Int!, $priority: String!) {
+    setPriority(id: $id, priority: $priority)
   }
 `;

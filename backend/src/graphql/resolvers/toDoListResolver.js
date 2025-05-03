@@ -4,6 +4,7 @@ const {
   deleteItem,
   filterItems,
   toggleComplete,
+  setPriority,
 } = require("../../business/toDoListRegras");
 
 const resolvers = {
@@ -12,10 +13,11 @@ const resolvers = {
   },
 
   Mutation: {
-    addItem: (_, { values: { name } }) => addItem(name),
+    addItem: (_, { values: { name, priority } }) => addItem(name, priority),
     updateItem: (_, { values: { id, name } }) => updateItem(id, name),
     deleteItem: (_, { id }) => deleteItem(id),
     toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para alternar o status
+    setPriority: (_, { id, priority }) => setPriority(id, priority), // Resolver para definir prioridade
   },
 };
 

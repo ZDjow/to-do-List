@@ -16,16 +16,20 @@ function getRandomInt() {
  * @param {string} name - Nome do item a ser adicionado.
  * @returns {boolean} - Retorna true se o item for adicionado com sucesso.
  */
-function addItem(name) {
+function addItem(name, priority = "low") {
   validateNameIsNotEmpty(name);
   validateNameIsUnique(name, TODO_LIST);
 
   TODO_LIST.push({
     id: getRandomInt(),
     name,
+    completed: false,
+    priority, // Salva a prioridade
   });
 
-  console.log(`Item "${name}" adicionado com sucesso.`);
+  console.log(
+    `Item "${name}" com prioridade "${priority}" adicionado com sucesso.`
+  );
   return true;
 }
 
@@ -97,10 +101,30 @@ function toggleComplete(id) {
   return true;
 }
 
+/**
+ * Define a prioridade de uma tarefa.
+ * @param {number} id - ID da tarefa.
+ * @param {string} priority - Prioridade a ser definida (baixa, média, alta).
+ * @returns {boolean} - Retorna true se a prioridade for definida com sucesso.
+ */
+function setPriority(id, priority) {
+  const item = TODO_LIST.find((item) => item.id === id);
+  if (!item) {
+    throw new Error(`A tarefa com o ID ${id} não foi encontrada.`);
+  }
+
+  item.priority = priority; // Define a prioridade
+  console.log(
+    `A prioridade da tarefa com o ID ${id} foi alterada para: ${priority}`
+  );
+  return true;
+}
+
 module.exports = {
   addItem,
   updateItem,
   deleteItem,
   filterItems,
   toggleComplete,
+  setPriority,
 };

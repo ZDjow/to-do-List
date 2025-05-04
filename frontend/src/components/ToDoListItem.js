@@ -27,9 +27,12 @@ export default function ToDoListItem({
         marginBottom: "5px",
         textDecoration: value.completed ? "line-through" : "none", // Aplica o estilo riscado
         color: value.completed ? "gray" : "inherit", // Altera a cor do texto se concluído
+        display: "flex", // Alinha os itens horizontalmente
+        justifyContent: "space-between", // Espaça o conteúdo
+        alignItems: "center", // Centraliza verticalmente
       }}
     >
-      <ListItemButton dense>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <IconButton
           sx={{
             width: "13px",
@@ -78,27 +81,42 @@ export default function ToDoListItem({
         ) : (
           <ListItemText
             primary={value?.name}
-            secondary={`${
-              value?.dateTime && !isNaN(new Date(value.dateTime).getTime())
-                ? new Date(value.dateTime).toLocaleString("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : "Data inválida"
-            }`}
+            sx={{ marginRight: "auto" }} // Garante que o texto ocupe o espaço restante
           />
         )}
+      </div>
 
+      {/* Data e Hora */}
+      <div
+        style={{
+          textAlign: "right",
+          minWidth: "150px",
+          marginLeft: "auto", // Adiciona margem automática para empurrar o conteúdo à direita
+        }}
+      >
+        {value?.dateTime && !isNaN(new Date(value.dateTime).getTime()) ? (
+          <span>
+            {new Date(value.dateTime).toLocaleString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        ) : (
+          <span>Data inválida</span>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: "5px", marginLeft: "10px" }}>
         <IconButton onClick={() => startEditing(value.id, value.name)}>
           <Edit />
         </IconButton>
         <IconButton onClick={() => onDelete(value.id)}>
           <Delete />
         </IconButton>
-      </ListItemButton>
+      </div>
     </ListItem>
   );
 }

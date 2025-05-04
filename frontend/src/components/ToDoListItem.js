@@ -76,7 +76,20 @@ export default function ToDoListItem({
             autoFocus
           />
         ) : (
-          <ListItemText primary={value?.name} />
+          <ListItemText
+            primary={value?.name}
+            secondary={`${
+              value?.dateTime && !isNaN(new Date(value.dateTime).getTime())
+                ? new Date(value.dateTime).toLocaleString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Data inválida"
+            }`}
+          />
         )}
 
         <IconButton onClick={() => startEditing(value.id, value.name)}>

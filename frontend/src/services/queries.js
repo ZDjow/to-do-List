@@ -8,13 +8,14 @@ export const GET_TODO_LIST = gql`
       name
       completed
       priority
+      dateTime
     }
   }
 `;
 
 export const ADD_ITEM_MUTATION = gql`
-  mutation addItem($name: String!, $priority: String!) {
-    addItem(values: { name: $name, priority: $priority })
+  mutation addItem($name: String!, $priority: String!, $dateTime: String!) {
+    addItem(values: { name: $name, priority: $priority, dateTime: $dateTime })
   }
 `;
 

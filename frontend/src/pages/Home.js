@@ -12,6 +12,8 @@ import ToDoList from "../components/ToDoList";
 import DeleteIcon from "@mui/icons-material/Delete"; // Importa o ícone de exclusão
 import { TOGGLE_COMPLETE_MUTATION } from "../services/queries"; // Importa a nova mutação
 import { IconButton } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers"; // Certifique-se de instalar o pacote @mui/x-date-pickers
+import { TimePicker } from "@mui/x-date-pickers"; // Importa o TimePicker
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
@@ -20,6 +22,7 @@ export default function Home() {
   const [editingItem, setEditingItem] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [dateTime, setDateTime] = useState(new Date()); // Estado para data e hora
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -47,9 +50,16 @@ export default function Home() {
         setErrorMessage("O nome da tarefa não pode estar vazio.");
         return;
       }
-      await addItem({ variables: { name: inputValue, priority } }); // Inclui a prioridade
+      await addItem({
+        variables: {
+          name: inputValue,
+          priority,
+          dateTime: dateTime ? new Date(dateTime).toISOString() : null, // Envia no formato ISO
+        },
+      });
       setInputValue("");
-      setPriority("low"); // Reseta a prioridade para o padrão
+      setPriority("low");
+      setDateTime(new Date()); // Reseta a data e hora para o padrão
       setErrorMessage("");
       refetch();
     } catch (error) {
@@ -165,12 +175,13 @@ export default function Home() {
             marginBottom: "10px",
           }}
         />
+
         {/* Botões de prioridade */}
         <div
           style={{
             position: "absolute",
-            top: "37%", // Centraliza verticalmente em relação ao campo de texto
-            right: "13px", // Posiciona os botões no canto direito
+            top: "24%", // Centraliza verticalmente em relação ao campo de texto
+            right: "10px", // Posiciona os botões no canto direito
             transform: "translateY(-50%)", // Ajusta o alinhamento vertical
             display: "flex",
             gap: "5px", // Espaçamento entre os botões
@@ -207,6 +218,52 @@ export default function Home() {
             }}
           />
         </div>
+        <div
+          style={{
+            marginBottom: "10px",
+            display: "flex", // Alinha os componentes lado a lado
+            gap: "10px", // Espaçamento entre os componentes
+          }}
+        >
+          {/* Seletor de Data */}
+          <DateTimePicker
+            label=""
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue); // Atualize diretamente com o objeto Date
+              }
+            }}
+            views={["year", "month", "day"]} // Mostra apenas a seleção de data
+            format="dd/MM/yyyy" // Define o formato da data como DD/MM/YYYY
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+              },
+            }}
+          />
+
+          {/* Seletor de Hora */}
+          <TimePicker
+            label=""
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue); // Atualize diretamente com o objeto Date
+              }
+            }}
+            ampm={false} // Desativa o formato AM/PM e usa o formato de 24 horas
+            format="HH:mm" // Define o formato da hora como 24 horas
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+              },
+            }}
+          />
+        </div>
+
         {/* Botões */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button

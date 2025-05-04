@@ -13,7 +13,8 @@ const resolvers = {
   },
 
   Mutation: {
-    addItem: (_, { values: { name, priority } }) => addItem(name, priority),
+    addItem: (_, { values: { name, priority, dateTime } }) =>
+      addItem(name, priority, dateTime),
     updateItem: (_, { values: { id, name } }) => updateItem(id, name),
     deleteItem: (_, { id }) => deleteItem(id),
     toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para alternar o status

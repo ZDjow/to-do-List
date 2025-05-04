@@ -16,19 +16,26 @@ function getRandomInt() {
  * @param {string} name - Nome do item a ser adicionado.
  * @returns {boolean} - Retorna true se o item for adicionado com sucesso.
  */
-function addItem(name, priority = "low") {
+function addItem(name, priority = "low", dateTime) {
   validateNameIsNotEmpty(name);
   validateNameIsUnique(name, TODO_LIST);
+
+  // Verifica se dateTime é válido e converte para ISO
+  const validDateTime =
+    dateTime && !isNaN(new Date(dateTime).getTime())
+      ? new Date(dateTime).toISOString()
+      : new Date().toISOString();
 
   TODO_LIST.push({
     id: getRandomInt(),
     name,
     completed: false,
-    priority, // Salva a prioridade
+    priority,
+    dateTime: validDateTime, // Salva a data e hora no formato ISO
   });
 
   console.log(
-    `Item "${name}" com prioridade "${priority}" adicionado com sucesso.`
+    `Item "${name}" com prioridade "${priority}" e data/hora "${validDateTime}" adicionado com sucesso.`
   );
   return true;
 }

@@ -15,6 +15,7 @@
     "@mui/x-date-pickers": "^8.2.0",
     "date-fns": "^4.1.0",
     "graphql": "^16.11.0",
+    "html2canvas": "^1.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "^5.0.1",

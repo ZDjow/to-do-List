@@ -1,10 +1,15 @@
 import React from "react";
-import { List, IconButton, Typography } from "@mui/material"; // Importando Typography
+import { List, IconButton, Typography, Button } from "@mui/material"; // Importando Button
 import ToDoListItem from "./ToDoListItem";
+import html2canvas from "html2canvas"; // Importa a biblioteca para capturar a tela
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SortIcon from "@mui/icons-material/Sort"; // Ícone para prioridade (linhas empilhadas)
 import TimelapseIcon from "@mui/icons-material/Timelapse"; // Ícone para horas
+import ShareIcon from "@mui/icons-material/Share"; // Importa o ícone de compartilhamento
+import DownloadIcon from "@mui/icons-material/Download"; // Ícone para download
+import TableChartIcon from "@mui/icons-material/TableChart"; // Ícone para CSV
+import DescriptionIcon from "@mui/icons-material/Description"; // Ícone de folha com riscos
 
 // Subcomponente para exibir mensagens de erro
 function ErrorMessage({ error }) {
@@ -26,8 +31,81 @@ export default function ToDoList({
   setShowAudit,
   setSortBy,
 }) {
+  const handleShare = async () => {
+    // Seleciona apenas o elemento da lista de tarefas
+    const listElement = document.querySelector(".todo-list-items"); // Use uma classe ou id específico
+    if (!listElement) return;
+
+    try {
+      const canvas = await html2canvas(listElement);
+      const image = canvas.toDataURL("image/png");
+
+      // Compartilhar a imagem usando a API Web Share (se suportada)
+      if (navigator.share) {
+        await navigator.share({
+          title: "Minha To-Do List",
+          text: "Confira minha lista de tarefas!",
+          files: [
+            new File([await (await fetch(image)).blob()], "todo-list.png", {
+              type: "image/png",
+            }),
+          ],
+        });
+      } else {
+        // Caso o navegador não suporte, abre a imagem em uma nova aba
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = "todo-list.png";
+        link.click();
+      }
+    } catch (error) {
+      console.error("Erro ao compartilhar a lista:", error);
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    const listElement = document.querySelector(".todo-list-items");
+    if (!listElement) return;
+
+    try {
+      const canvas = await html2canvas(listElement);
+      const image = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "todo-list.png";
+      link.click();
+    } catch (error) {
+      console.error("Erro ao baixar a lista como imagem:", error);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (!data?.todoList?.length) return;
+
+    const csvContent = [
+      ["ID", "Nome", "Concluído", "Prioridade", "Data e Hora"],
+      ...data.todoList.map((item) => [
+        item.id,
+        item.name,
+        item.completed ? "Sim" : "Não",
+        item.priority,
+        item.dateTime,
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "todo-list.csv";
+    link.click();
+  };
+
   return (
     <div
+      id="todo-list-container" // Adiciona um ID para capturar a lista
       style={{
         backgroundColor: "rgb(200, 200, 200)",
         padding: "10px",
@@ -101,9 +179,11 @@ export default function ToDoList({
       </div>
 
       <List
+        className="todo-list-items" // Adiciona uma classe para capturar a lista
         sx={{
           width: "100%",
           color: "rgb(64, 64, 69)",
+          position: "relative", // Permite posicionar o botão dentro da lista
         }}
       >
         {data?.todoList?.length === 0 ? (
@@ -137,6 +217,49 @@ export default function ToDoList({
           })
         )}
       </List>
+
+      {/* Botões de compartilhamento, download e exportação */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: "10px", // Espaçamento entre os botões
+        }}
+      >
+        <IconButton
+          onClick={handleExportCSV} // Botão de exportar CSV agora vem primeiro
+          sx={{
+            color: "gray",
+            "&:hover": {
+              color: "darkgray",
+            },
+          }}
+        >
+          <DescriptionIcon /> {/* Ícone de folha com riscos */}
+        </IconButton>
+        <IconButton
+          onClick={handleDownloadImage}
+          sx={{
+            color: "gray",
+            "&:hover": {
+              color: "darkgray",
+            },
+          }}
+        >
+          <DownloadIcon />
+        </IconButton>
+        <IconButton
+          onClick={handleShare} // Botão de compartilhar agora vem por último
+          sx={{
+            color: "gray",
+            "&:hover": {
+              color: "darkgray",
+            },
+          }}
+        >
+          <ShareIcon />
+        </IconButton>
+      </div>
     </div>
   );
 }

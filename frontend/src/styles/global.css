@@ -23,7 +23,9 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1; /* Fica atrás de todo o conteúdo */
-  background-image: url("https://cdn.getmidnight.com/a4bab3ce420ea5342f99b468206738eb/2024/05/Design-de-uma-Clinica-Estetica-de-Luxo.webp");
+  /*background-image: url("https://cdn.getmidnight.com/a4bab3ce420ea5342f99b468206738eb/2024/05/Design-de-uma-Clinica-Estetica-de-Luxo.webp");*/
+  /*background-image: url("https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-f3b8-61f7-bc04-f4dedba8c3ab/raw?se=2025-05-04T19%3A42%3A46Z&sp=r&sv=2024-08-04&sr=b&scid=2fb86c3c-2b98-503f-9a80-3192dca1d924&skoid=fa7966e7-f8ea-483c-919a-13acfd61d696&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-04T10%3A55%3A33Z&ske=2025-05-05T10%3A55%3A33Z&sks=b&skv=2024-08-04&sig=0FdlP7N/X2viV%2BSi23/f%2Ba7lfmvd93Oj1vlKK6c41Tc%3D");*/
+  background-image: url("https://github.com/ZDjow/to-do-List/blob/main/frontend/public/media/estetica.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

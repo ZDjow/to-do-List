@@ -13,6 +13,14 @@ export default function ToDoListItem({
   onToggleComplete, // Função para alternar o status
   showAudit, // Passa a visibilidade da auditoria
 }) {
+  const now = new Date();
+  const taskDateTime = new Date(value.dateTime);
+  const isDatePast = taskDateTime.toDateString() < now.toDateString();
+  const isTimePast =
+    isDatePast || // Se a data já passou, o horário também deve ficar vermelho
+    (taskDateTime.toDateString() === now.toDateString() &&
+      taskDateTime.getTime() < now.getTime());
+
   return (
     <ListItem
       disablePadding
@@ -129,13 +137,27 @@ export default function ToDoListItem({
       >
         {value?.dateTime && !isNaN(new Date(value.dateTime).getTime()) ? (
           <span>
-            {new Date(value.dateTime).toLocaleString("pt-BR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            <span
+              style={{
+                color: isDatePast ? "red" : "inherit", // Vermelho se a data já passou
+              }}
+            >
+              {new Date(value.dateTime).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </span>{" "}
+            <span
+              style={{
+                color: isTimePast ? "red" : "inherit", // Vermelho se o horário já passou
+              }}
+            >
+              {new Date(value.dateTime).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
           </span>
         ) : (
           <span>Data inválida</span>

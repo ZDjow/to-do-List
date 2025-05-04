@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Menu, MenuItem } from "@mui/material"; // Importa Menu e MenuItem
 import { useQuery, useMutation } from "@apollo/client";
 import {
   GET_TODO_LIST,
@@ -25,6 +25,7 @@ export default function Home() {
   const [dateTime, setDateTime] = useState(new Date()); // Estado para data e hora
   const [showAudit, setShowAudit] = useState(false); // Estado inicial alterado para false
   const [sortBy, setSortBy] = useState(null); // Estado para o critério de ordenação
+  const [deleteMenuAnchor, setDeleteMenuAnchor] = useState(null); // Estado para o menu
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -124,17 +125,60 @@ export default function Home() {
     }
   };
 
+  const handleOpenDeleteMenu = (event) => {
+    setDeleteMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseDeleteMenu = () => {
+    setDeleteMenuAnchor(null);
+  };
+
+  const handleDeleteByPriority = async (priority) => {
+    try {
+      if (data?.todoList?.length > 0) {
+        for (const item of data.todoList) {
+          if (item.priority === priority) {
+            await deleteItem({ variables: { id: item.id } });
+          }
+        }
+        refetch();
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      handleCloseDeleteMenu();
+    }
+  };
+
+  const handleDeleteCompleted = async () => {
+    try {
+      if (data?.todoList?.length > 0) {
+        for (const item of data.todoList) {
+          if (item.completed) {
+            await deleteItem({ variables: { id: item.id } });
+          }
+        }
+        refetch();
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      handleCloseDeleteMenu();
+    }
+  };
+
   const handleDeleteAll = async () => {
     try {
-      // Percorre todas as tarefas e exclui uma por uma
       if (data?.todoList?.length > 0) {
         for (const item of data.todoList) {
           await deleteItem({ variables: { id: item.id } });
         }
-        refetch(); // Atualiza a lista após excluir todas
+        refetch();
       }
     } catch (error) {
       setErrorMessage(error.message);
+    } finally {
+      handleCloseDeleteMenu();
     }
   };
 
@@ -355,10 +399,72 @@ export default function Home() {
               },
               marginLeft: "10px", // Espaçamento entre os botões
             }}
-            onClick={handleDeleteAll}
+            onClick={handleOpenDeleteMenu} // Abre o menu
           >
             <DeleteIcon />
           </Button>
+          <Menu
+            anchorEl={deleteMenuAnchor}
+            open={Boolean(deleteMenuAnchor)}
+            onClose={handleCloseDeleteMenu}
+            sx={{
+              "& .MuiPaper-root": {
+                backgroundColor: "rgb(200, 200, 200)", // Fundo do menu
+                color: "rgb(64, 64, 64)", // Cor do texto
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => handleDeleteByPriority("low")}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(150, 150, 150)", // Fundo ao passar o mouse
+                },
+              }}
+            >
+              Excluir tarefas de baixa prioridade
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleDeleteByPriority("medium")}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(150, 150, 150)",
+                },
+              }}
+            >
+              Excluir tarefas de média prioridade
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleDeleteByPriority("high")}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(150, 150, 150)",
+                },
+              }}
+            >
+              Excluir tarefas de alta prioridade
+            </MenuItem>
+            <MenuItem
+              onClick={handleDeleteCompleted}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(150, 150, 150)",
+                },
+              }}
+            >
+              Excluir tarefas completas
+            </MenuItem>
+            <MenuItem
+              onClick={handleDeleteAll}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(150, 150, 150)",
+                },
+              }}
+            >
+              Excluir todas as tarefas
+            </MenuItem>
+          </Menu>
         </div>
       </div>
       <ToDoList

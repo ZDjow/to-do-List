@@ -29,7 +29,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: grayscale(100%); /* Aplica o efeito preto e branco */
+  filter: grayscale(100%); /*Aplica o efeito preto e branco */
 }
 
 /* Estilos do App.css */

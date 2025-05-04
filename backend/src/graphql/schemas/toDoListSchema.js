@@ -5,6 +5,8 @@ const typeDefs = `#graphql
     completed: Boolean # Campo para indicar se a tarefa está concluída
     priority: String # Campo para prioridade
     dateTime: String # Campo para data e hora
+    createdAt: String # Data de criação
+    updatedAt: String # Data de modificação
   }
 
   input ItemInput {

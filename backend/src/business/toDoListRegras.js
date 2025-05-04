@@ -32,6 +32,8 @@ function addItem(name, priority = "low", dateTime) {
     completed: false,
     priority,
     dateTime: validDateTime, // Salva a data e hora no formato ISO
+    createdAt: new Date().toISOString(), // Adiciona data de criação
+    updatedAt: null, // Inicialmente nulo
   });
 
   console.log(
@@ -56,6 +58,7 @@ function updateItem(id, name) {
   }
 
   TODO_LIST[itemIndex].name = name;
+  TODO_LIST[itemIndex].updatedAt = new Date().toISOString(); // Atualiza data de modificação
   console.log(`Tarefa com o ID ${id} atualizada para: ${name}`);
   return true;
 }

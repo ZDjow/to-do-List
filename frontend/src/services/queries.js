@@ -9,6 +9,8 @@ export const GET_TODO_LIST = gql`
       completed
       priority
       dateTime
+      createdAt
+      updatedAt
     }
   }
 `;

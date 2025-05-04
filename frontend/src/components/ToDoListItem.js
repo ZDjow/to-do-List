@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  IconButton,
-  TextField,
-} from "@mui/material";
+import { ListItem, ListItemText, IconButton, TextField } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 
 export default function ToDoListItem({
@@ -17,6 +11,7 @@ export default function ToDoListItem({
   saveEditing,
   onDelete,
   onToggleComplete, // Função para alternar o status
+  showAudit, // Passa a visibilidade da auditoria
 }) {
   return (
     <ListItem
@@ -80,7 +75,45 @@ export default function ToDoListItem({
           />
         ) : (
           <ListItemText
-            primary={value?.name}
+            primary={
+              <>
+                {value?.name}
+                {showAudit && (
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "gray",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {value?.createdAt && (
+                      <div>
+                        Agendado em{" "}
+                        {new Date(value.createdAt).toLocaleString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    )}
+                    {value?.updatedAt && (
+                      <div>
+                        Alterado em{" "}
+                        {new Date(value.updatedAt).toLocaleString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            }
             sx={{ marginRight: "auto" }} // Garante que o texto ocupe o espaço restante
           />
         )}

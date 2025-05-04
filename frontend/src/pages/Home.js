@@ -23,6 +23,7 @@ export default function Home() {
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [dateTime, setDateTime] = useState(new Date()); // Estado para data e hora
+  const [showAudit, setShowAudit] = useState(true); // Estado para visibilidade da auditoria
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -338,6 +339,8 @@ export default function Home() {
         setEditingText={setEditingText}
         error={errorMessage}
         onToggleComplete={handleToggleComplete} // Passa a função para alternar o status
+        showAudit={showAudit} // Passa o estado de visibilidade
+        setShowAudit={setShowAudit} // Passa a função para alternar visibilidade
       />
     </div>
   );

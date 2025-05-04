@@ -36,20 +36,6 @@ export default function ToDoListItem({
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        <IconButton
-          sx={{
-            width: "13px",
-            height: "13px",
-            padding: "0px",
-            marginRight: "7px",
-            backgroundColor:
-              value.priority === "low"
-                ? "green"
-                : value.priority === "medium"
-                ? "yellow"
-                : "red", // Define a cor de fundo com base na prioridade
-          }}
-        />
         {/* Botão de alternar conclusão */}
         <IconButton
           onClick={() => onToggleComplete(value.id)}
@@ -63,6 +49,30 @@ export default function ToDoListItem({
             backgroundColor: value.completed ? "gray" : "transparent", // Fundo preenchido se concluído
             "&:hover": {
               backgroundColor: value.completed ? "darkgray" : "lightgray", // Efeito hover
+            },
+          }}
+        />
+        <IconButton
+          sx={{
+            width: "13px",
+            height: "13px",
+            padding: "0px",
+            marginRight: "7px",
+            backgroundColor: value.completed
+              ? "gray" // Fica cinza se a tarefa estiver concluída
+              : value.priority === "low"
+              ? "green"
+              : value.priority === "medium"
+              ? "yellow"
+              : "red", // Define a cor de fundo com base na prioridade
+            "&:hover": {
+              backgroundColor: value.completed
+                ? "darkgray" // Efeito hover para o estado concluído
+                : value.priority === "low"
+                ? "lightgreen"
+                : value.priority === "medium"
+                ? "lightyellow"
+                : "lightcoral", // Efeito hover para as prioridades
             },
           }}
         />

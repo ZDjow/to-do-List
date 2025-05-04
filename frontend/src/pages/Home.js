@@ -23,7 +23,8 @@ export default function Home() {
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [dateTime, setDateTime] = useState(new Date()); // Estado para data e hora
-  const [showAudit, setShowAudit] = useState(true); // Estado para visibilidade da auditoria
+  const [showAudit, setShowAudit] = useState(false); // Estado inicial alterado para false
+  const [sortBy, setSortBy] = useState(null); // Estado para o critério de ordenação
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -44,6 +45,24 @@ export default function Home() {
   const [toggleComplete] = useMutation(TOGGLE_COMPLETE_MUTATION, {
     refetchQueries: [{ query: GET_TODO_LIST }],
   });
+
+  const sortedData = React.useMemo(() => {
+    if (!data?.todoList) return [];
+    switch (sortBy) {
+      case "priority":
+        return [...data.todoList].sort((a, b) =>
+          a.priority.localeCompare(b.priority)
+        );
+      case "alphabetical":
+        return [...data.todoList].sort((a, b) => a.name.localeCompare(b.name));
+      case "dateTime":
+        return [...data.todoList].sort(
+          (a, b) => new Date(a.dateTime) - new Date(b.dateTime)
+        );
+      default:
+        return data.todoList;
+    }
+  }, [data, sortBy]);
 
   const handleAddItem = async () => {
     try {
@@ -241,6 +260,13 @@ export default function Home() {
               textField: {
                 variant: "outlined",
                 fullWidth: true,
+                InputProps: {
+                  sx: {
+                    "& .MuiSvgIcon-root": {
+                      color: "gray", // Define a cor cinza para o ícone do calendário
+                    },
+                  },
+                },
               },
             }}
           />
@@ -260,6 +286,13 @@ export default function Home() {
               textField: {
                 variant: "outlined",
                 fullWidth: true,
+                InputProps: {
+                  sx: {
+                    "& .MuiSvgIcon-root": {
+                      color: "gray", // Define a cor cinza para o ícone do relógio
+                    },
+                  },
+                },
               },
             }}
           />
@@ -297,40 +330,39 @@ export default function Home() {
               width: "8%",
               minWidth: "40px",
               color: "white",
-              backgroundColor: "rgb(125, 125, 125)",
+              backgroundColor: "gray", // Define o fundo cinza
               "&:hover": {
-                backgroundColor: "rgb(64, 64, 69)",
+                backgroundColor: "darkgray", // Fundo cinza mais escuro no hover
               },
             }}
-            color="grey"
             onClick={() => {
               setInputValue(""); // Limpa o campo de texto
               setErrorMessage(""); // Limpa mensagens de erro
               refetch({ filter: { name: "" } }); // Reseta o filtro
             }}
           >
-            <FilterAltOffIcon /> {/* Ícone do botão */}
+            <FilterAltOffIcon />
           </Button>
           <Button
             variant="contained"
             sx={{
-              width: "8%", // Mesmo tamanho do botão de "Limpar Filtro"
+              width: "8%",
               minWidth: "40px",
               color: "white",
-              backgroundColor: "rgb(125, 125, 125)", // Mesma cor do botão de "Limpar Filtro"
+              backgroundColor: "gray", // Define o fundo cinza
               "&:hover": {
-                backgroundColor: "rgb(64, 64, 69)", // Mesma cor ao passar o mouse
+                backgroundColor: "darkgray", // Fundo cinza mais escuro no hover
               },
               marginLeft: "10px", // Espaçamento entre os botões
             }}
-            onClick={handleDeleteAll} // Chama a função para excluir todas as tarefas
+            onClick={handleDeleteAll}
           >
-            <DeleteIcon /> {/* Ícone de exclusão */}
+            <DeleteIcon />
           </Button>
         </div>
       </div>
       <ToDoList
-        data={data}
+        data={{ todoList: sortedData }}
         onDelete={handleDeleteItem}
         startEditing={handleStartEditing}
         saveEditing={handleSaveEditing}
@@ -341,6 +373,7 @@ export default function Home() {
         onToggleComplete={handleToggleComplete} // Passa a função para alternar o status
         showAudit={showAudit} // Passa o estado de visibilidade
         setShowAudit={setShowAudit} // Passa a função para alternar visibilidade
+        setSortBy={setSortBy} // Passa a função para definir o critério de ordenação
       />
     </div>
   );

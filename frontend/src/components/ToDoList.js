@@ -1,8 +1,10 @@
 import React from "react";
-import { List, IconButton } from "@mui/material";
+import { List, IconButton, Typography } from "@mui/material"; // Importando Typography
 import ToDoListItem from "./ToDoListItem";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import SortIcon from "@mui/icons-material/Sort"; // Ícone para prioridade (linhas empilhadas)
+import TimelapseIcon from "@mui/icons-material/Timelapse"; // Ícone para horas
 
 // Subcomponente para exibir mensagens de erro
 function ErrorMessage({ error }) {
@@ -19,40 +21,78 @@ export default function ToDoList({
   editingText,
   setEditingText,
   error,
-  onToggleComplete, // Adicione esta linha para receber a prop
+  onToggleComplete,
   showAudit,
   setShowAudit,
+  setSortBy,
 }) {
   return (
     <div
       style={{
-        backgroundColor: "rgb(200, 200, 200)", // Fundo claro
+        backgroundColor: "rgb(200, 200, 200)",
         padding: "10px",
         borderRadius: "5px",
-        marginTop: "10px", // Espaço entre a lista e o formulário
-        position: "relative", // Permite posicionar o botão no layout
+        marginTop: "10px",
+        position: "relative",
       }}
     >
       <ErrorMessage error={error} />
 
-      {/* Botão de alternar visibilidade */}
+      {/* Botões de filtro */}
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end", // Alinha o botão à direita
-          marginBottom: "10px", // Espaço entre o botão e as tarefas
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <IconButton
+            onClick={() => setSortBy("priority")}
+            style={{
+              color: "gray", // Cor padrão do ícone
+            }}
+          >
+            <SortIcon /> {/* Ícone para prioridade */}
+          </IconButton>
+          <IconButton
+            onClick={() => setSortBy("alphabetical")}
+            style={{
+              color: "gray", // Cor do texto
+              display: "flex", // Centraliza o conteúdo
+              alignItems: "center", // Centraliza verticalmente
+              justifyContent: "center", // Centraliza horizontalmente
+              borderRadius: "50%", // Garante que o botão seja circular
+              width: "40px", // Define largura consistente
+              height: "40px", // Define altura consistente
+            }}
+          >
+            <Typography
+              variant="h6"
+              component="span"
+              style={{
+                fontSize: "18px", // Ajusta o tamanho do texto
+                fontWeight: "bold", // Deixa o "A" mais destacado
+              }}
+            >
+              A
+            </Typography>
+          </IconButton>
+          <IconButton
+            onClick={() => setSortBy("dateTime")}
+            style={{ color: "gray" }}
+          >
+            <TimelapseIcon /> {/* Ícone para horas */}
+          </IconButton>
+        </div>
+
+        {/* Botão de alternar visibilidade */}
         <IconButton
           onClick={() => setShowAudit(!showAudit)}
           sx={{
-            position: "absolute",
-            top: "5px", // Ajusta a posição vertical
-            right: "11px", // Ajusta a posição horizontal
-            color: "rgb(125, 125, 125)", // Cor cinza semelhante aos outros botões
-            zIndex: 1, // Garante que o botão fique acima de outros elementos
+            color: "rgb(125, 125, 125)",
             "&:hover": {
-              color: "rgb(64, 64, 69)", // Cor mais escura ao passar o mouse
+              color: "rgb(64, 64, 69)",
             },
           }}
         >
@@ -63,8 +103,7 @@ export default function ToDoList({
       <List
         sx={{
           width: "100%",
-          color: "rgb(64, 64, 69)", // Texto cinza escuro
-          position: "relative", // Permite posicionar o botão dentro da lista
+          color: "rgb(64, 64, 69)",
         }}
       >
         {data?.todoList?.length === 0 ? (
@@ -72,7 +111,7 @@ export default function ToDoList({
             style={{
               textAlign: "center",
               fontSize: "15px",
-              color: "rgb(64, 64, 69)", // Texto cinza escuro
+              color: "rgb(64, 64, 69)",
             }}
           >
             Sem tarefas no momento.
@@ -91,9 +130,8 @@ export default function ToDoList({
                 startEditing={startEditing}
                 saveEditing={saveEditing}
                 onDelete={onDelete}
-                onToggleComplete={onToggleComplete} // Passa a função para alternar o status
+                onToggleComplete={onToggleComplete}
                 showAudit={showAudit}
-                setShowAudit={setShowAudit} // Passa a visibilidade da auditoria para o item
               />
             );
           })

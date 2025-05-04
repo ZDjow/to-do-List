@@ -143,10 +143,26 @@ export default function ToDoListItem({
       </div>
 
       <div style={{ display: "flex", gap: "5px", marginLeft: "10px" }}>
-        <IconButton onClick={() => startEditing(value.id, value.name)}>
+        <IconButton
+          onClick={() => startEditing(value.id, value.name)}
+          sx={{
+            color: "gray", // Define a cor cinza
+            "&:hover": {
+              color: "darkgray", // Cor ao passar o mouse
+            },
+          }}
+        >
           <Edit />
         </IconButton>
-        <IconButton onClick={() => onDelete(value.id)}>
+        <IconButton
+          onClick={() => onDelete(value.id)}
+          sx={{
+            color: "gray", // Define a cor cinza
+            "&:hover": {
+              color: "darkgray", // Cor ao passar o mouse
+            },
+          }}
+        >
           <Delete />
         </IconButton>
       </div>

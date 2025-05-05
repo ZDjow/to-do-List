@@ -2,6 +2,7 @@
   "name": "uno-challenge",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "node src/server.js"
@@ -9,7 +10,6 @@
   "dependencies": {
     "@apollo/server": "^4.7.4",
     "graphql": "^16.11.0",
-    "moment": "^2.29.1",
-    "moment-timezone": "^0.5.33"
+    "uuid": "^11.1.0"
   }
 }

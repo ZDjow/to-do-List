@@ -1,8 +1,8 @@
-const { ApolloServer } = require("@apollo/server");
-const { startStandaloneServer } = require("@apollo/server/standalone");
-const typeDefs = require("./graphql/schemas/toDoListSchema");
-const resolvers = require("./graphql/resolvers/toDoListResolver");
-const CONFIG = require("./config/config");
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import typeDefs from "./graphql/schemas/toDoListSchema.js";
+import resolvers from "./graphql/resolvers/toDoListResolver.js";
+import CONFIG from "./config/config.js";
 
 const startServer = async () => {
   const server = new ApolloServer({

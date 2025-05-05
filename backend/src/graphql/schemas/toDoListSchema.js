@@ -2,11 +2,11 @@ const typeDefs = `#graphql
   type Item {
     id: Int
     name: String
-    completed: Boolean # Campo para indicar se a tarefa está concluída
-    priority: String # Campo para prioridade
-    dateTime: String # Campo para data e hora
-    createdAt: String # Data de criação
-    updatedAt: String # Data de modificação
+    completed: Boolean # Campo para indicar se a tarefa está concluída.
+    priority: String # Campo para prioridade.
+    dateTime: String # Campo para data e hora.
+    createdAt: String # Auditoria de criação.
+    updatedAt: String # Auditoria de modificação.
   }
 
   input ItemInput {
@@ -29,9 +29,9 @@ const typeDefs = `#graphql
     addItem(values: ItemInput): Boolean
     updateItem(values: ItemInput): Boolean
     deleteItem(id: Int!): Boolean
-    toggleComplete(id: Int!): Boolean # Alternar o status de conclusão
-    setPriority(id: Int!, priority: String!): Boolean # Definir prioridade
+    toggleComplete(id: Int!): Boolean # Completar ou não tarefa.
+    setPriority(id: Int!, priority: String!): Boolean # Definir prioridade.
   }
 `;
 
-module.exports = typeDefs;
+export default typeDefs;

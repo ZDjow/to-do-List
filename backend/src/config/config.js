@@ -1,6 +1,6 @@
 const CONFIG = {
-  SERVER_PORT: 4000, // Porta do servidor
-  GRAPHQL_PATH: "/graphql", // Caminho para o GraphQL
+  SERVER_PORT: 4000,
+  GRAPHQL_PATH: "/graphql",
 };
 
-module.exports = CONFIG;
+export default CONFIG;

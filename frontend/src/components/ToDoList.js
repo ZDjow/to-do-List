@@ -1,16 +1,16 @@
 import React from "react";
-import { List, IconButton, Typography } from "@mui/material"; // Importando Button
+import { List, IconButton, Typography } from "@mui/material";
 import ToDoListItem from "./ToDoListItem";
-import html2canvas from "html2canvas"; // Importa a biblioteca para capturar a tela
+import html2canvas from "html2canvas";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import SortIcon from "@mui/icons-material/Sort"; // Ícone para prioridade (linhas empilhadas)
-import TimelapseIcon from "@mui/icons-material/Timelapse"; // Ícone para horas
-import ShareIcon from "@mui/icons-material/Share"; // Importa o ícone de compartilhamento
-import DownloadIcon from "@mui/icons-material/Download"; // Ícone para download
-import DescriptionIcon from "@mui/icons-material/Description"; // Ícone de folha com riscos
+import SortIcon from "@mui/icons-material/Sort";
+import TimelapseIcon from "@mui/icons-material/Timelapse";
+import ShareIcon from "@mui/icons-material/Share";
+import DownloadIcon from "@mui/icons-material/Download";
+import DescriptionIcon from "@mui/icons-material/Description";
 
-// Subcomponente para exibir mensagens de erro
+// Subcomponente para exibir as mensagens de erro.
 function ErrorMessage({ error }) {
   return error ? <p style={{ color: "red" }}>{error}</p> : null;
 }
@@ -19,7 +19,6 @@ function ErrorMessage({ error }) {
 export default function ToDoList({
   data,
   onDelete,
-  startEditing,
   saveEditing,
   editingItem,
   editingText,
@@ -36,14 +35,15 @@ export default function ToDoList({
   const handleStartEditing = (id, currentName, currentDateTime) => {
     setEditingItem(id);
     setEditingText(currentName);
-    setEditingDateTime(currentDateTime ? new Date(currentDateTime) : null); // Converte para objeto Date
+    setEditingDateTime(currentDateTime ? new Date(currentDateTime) : null);
   };
 
+  //Compartilha a lista de tarefas.
   const handleShare = async () => {
     const listElement = document.querySelector(".todo-list-items");
     if (!listElement) return;
 
-    // Oculta os botões antes de capturar a imagem
+    // Oculta os botões de prioridade, edição e exclusão da tarefa antes de capturar a imagem para compartilhar.
     const buttons = listElement.querySelectorAll("button, .MuiIconButton-root");
     buttons.forEach((button) => (button.style.display = "none"));
 
@@ -70,16 +70,16 @@ export default function ToDoList({
     } catch (error) {
       console.error("Erro ao compartilhar a lista:", error);
     } finally {
-      // Restaura a visibilidade dos botões
-      buttons.forEach((button) => (button.style.display = ""));
+      buttons.forEach((button) => (button.style.display = "")); // Restaura a visibilidade dos botões.
     }
   };
 
+  // Baixa a lista de tarefas como imagem.
   const handleDownloadImage = async () => {
     const listElement = document.querySelector(".todo-list-items");
     if (!listElement) return;
 
-    // Oculta os botões antes de capturar a imagem
+    // Oculta os botões antes de capturar a imagem para baixar.
     const buttons = listElement.querySelectorAll("button, .MuiIconButton-root");
     buttons.forEach((button) => (button.style.display = "none"));
 
@@ -94,11 +94,11 @@ export default function ToDoList({
     } catch (error) {
       console.error("Erro ao baixar a lista como imagem:", error);
     } finally {
-      // Restaura a visibilidade dos botões
-      buttons.forEach((button) => (button.style.display = ""));
+      buttons.forEach((button) => (button.style.display = "")); // Restaura a visibilidade dos botões.
     }
   };
 
+  // Exporta a lista de tarefas como CSV.
   const handleExportCSV = () => {
     if (!data?.todoList?.length) return;
 
@@ -132,16 +132,16 @@ export default function ToDoList({
         item.id,
         item.name,
         item.completed ? "Sim" : "Não",
-        translatePriority(item.priority), // Traduz a prioridade
-        formatDateTime(item.dateTime), // Formata a data e hora
+        translatePriority(item.priority), // Traduz a prioridade para português.
+        formatDateTime(item.dateTime), // Formata a data e hora para simplificar a planilha.
       ]),
     ]
       .map((row) => row.join(","))
       .join("\n");
 
     const blob = new Blob(["\uFEFF" + csvContent], {
-      type: "text/csv;charset=utf-8;",
-    }); // Adiciona BOM para UTF-8
+      type: "text/csv;charset=utf-8;", //Formata os caracteres para UTF-8.
+    });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "todo-list.csv";
@@ -155,7 +155,7 @@ export default function ToDoList({
         return;
       }
 
-      await saveEditing(id, editingDateTime); // Passa a data/hora atualizada
+      await saveEditing(id, editingDateTime); // Passa a data e hora atualizadas.
       setEditingItem(null);
       setEditingText("");
       setEditingDateTime(null);
@@ -166,7 +166,7 @@ export default function ToDoList({
 
   return (
     <div
-      id="todo-list-container" // Adiciona um ID para capturar a lista
+      id="todo-list-container"
       style={{
         backgroundColor: "rgb(200, 200, 200)",
         padding: "10px",
@@ -177,7 +177,6 @@ export default function ToDoList({
     >
       <ErrorMessage error={error} />
 
-      {/* Botões de filtro */}
       <div
         style={{
           display: "flex",
@@ -185,33 +184,34 @@ export default function ToDoList({
           alignItems: "center",
         }}
       >
+        {/* Botões de ordenação */}
         <div style={{ display: "flex", gap: "10px" }}>
           <IconButton
             onClick={() => setSortBy("priority")}
             style={{
-              color: "gray", // Cor padrão do ícone
+              color: "gray",
             }}
           >
-            <SortIcon /> {/* Ícone para prioridade */}
+            <SortIcon />
           </IconButton>
           <IconButton
             onClick={() => setSortBy("alphabetical")}
             style={{
-              color: "gray", // Cor do texto
-              display: "flex", // Centraliza o conteúdo
-              alignItems: "center", // Centraliza verticalmente
-              justifyContent: "center", // Centraliza horizontalmente
-              borderRadius: "50%", // Garante que o botão seja circular
-              width: "40px", // Define largura consistente
-              height: "40px", // Define altura consistente
+              color: "gray",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              width: "40px",
+              height: "40px",
             }}
           >
             <Typography
               variant="h6"
               component="span"
               style={{
-                fontSize: "18px", // Ajusta o tamanho do texto
-                fontWeight: "bold", // Deixa o "A" mais destacado
+                fontSize: "18px",
+                fontWeight: "bold",
               }}
             >
               A
@@ -221,11 +221,11 @@ export default function ToDoList({
             onClick={() => setSortBy("dateTime")}
             style={{ color: "gray" }}
           >
-            <TimelapseIcon /> {/* Ícone para horas */}
+            <TimelapseIcon />
           </IconButton>
         </div>
 
-        {/* Botão de alternar visibilidade */}
+        {/* Botão de mostrar auditoria */}
         <IconButton
           onClick={() => setShowAudit(!showAudit)}
           sx={{
@@ -240,11 +240,11 @@ export default function ToDoList({
       </div>
 
       <List
-        className="todo-list-items" // Adiciona uma classe para capturar a lista
+        className="todo-list-items"
         sx={{
           width: "100%",
           color: "rgb(64, 64, 69)",
-          position: "relative", // Permite posicionar o botão dentro da lista
+          position: "relative",
         }}
       >
         {data?.todoList?.length === 0 ? (
@@ -274,7 +274,7 @@ export default function ToDoList({
                 onToggleComplete={onToggleComplete}
                 showAudit={showAudit}
                 startEditing={handleStartEditing}
-                saveEditing={handleSaveEditing} // Passa a função corrigida
+                saveEditing={handleSaveEditing}
               />
             );
           })
@@ -286,11 +286,11 @@ export default function ToDoList({
         style={{
           display: "flex",
           justifyContent: "flex-start",
-          gap: "10px", // Espaçamento entre os botões
+          gap: "10px",
         }}
       >
         <IconButton
-          onClick={handleExportCSV} // Botão de exportar CSV agora vem primeiro
+          onClick={handleExportCSV}
           sx={{
             color: "gray",
             "&:hover": {
@@ -298,7 +298,7 @@ export default function ToDoList({
             },
           }}
         >
-          <DescriptionIcon /> {/* Ícone de folha com riscos */}
+          <DescriptionIcon />
         </IconButton>
         <IconButton
           onClick={handleDownloadImage}
@@ -312,7 +312,7 @@ export default function ToDoList({
           <DownloadIcon />
         </IconButton>
         <IconButton
-          onClick={handleShare} // Botão de compartilhar agora vem por último
+          onClick={handleShare}
           sx={{
             color: "gray",
             "&:hover": {

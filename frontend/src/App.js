@@ -1,6 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
-import client from "./config/apolloClient"; // Importa o Apollo Client configurado
-import Home from "./pages/Home"; // Página principal
+import client from "./config/apolloClient";
+import Home from "./pages/Home";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 

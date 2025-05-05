@@ -32,12 +32,12 @@ export default function ToDoListItem({
         textDecoration: value.completed ? "line-through" : "none",
         color: value.completed ? "gray" : "inherit",
         display: "flex",
-        flexDirection: "column", // Alinha os elementos verticalmente
-        alignItems: "flex-start", // Alinha os itens à esquerda
+        flexDirection: "column",
+        alignItems: "flex-start",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-        {/* Botão de alternar conclusão */}
+        {/* Botão de completar tarefa */}
         <IconButton
           onClick={() => onToggleComplete(value.id)}
           sx={{
@@ -60,7 +60,7 @@ export default function ToDoListItem({
             height: "13px",
             borderRadius: "50%",
             backgroundColor: value.completed
-              ? "gray" // Cor cinza se a tarefa estiver concluída
+              ? "gray"
               : value.priority === "low"
               ? "green"
               : value.priority === "medium"
@@ -75,9 +75,9 @@ export default function ToDoListItem({
             onChange={(e) => setEditingText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                saveEditing(value.id, editingDateTime); // Passa a data/hora ao salvar
+                saveEditing(value.id, editingDateTime);
               } else if (e.key === "Escape") {
-                startEditing(null); // Cancela a edição
+                startEditing(null);
               }
             }}
             autoFocus
@@ -90,9 +90,9 @@ export default function ToDoListItem({
           <div
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                saveEditing(value.id, editingText, editingDateTime); // Salva a edição ao pressionar Enter
+                saveEditing(value.id, editingText, editingDateTime); // Salva a edição ao pressionar enter.
               } else if (e.key === "Escape") {
-                startEditing(null); // Cancela a edição ao pressionar Escape
+                startEditing(null); // Cancela a edição ao pressionar esc.
               }
             }}
             style={{ display: "flex", alignItems: "center" }}
@@ -100,8 +100,8 @@ export default function ToDoListItem({
             <DateTimePicker
               value={editingDateTime}
               onChange={(newValue) => setEditingDateTime(newValue)}
-              ampm={false} // Formato 24 horas
-              format="dd/MM/yyyy HH:mm" // Formato de exibição
+              ampm={false}
+              format="dd/MM/yyyy HH:mm"
               sx={{ marginRight: "10px", width: "150px" }}
             />
           </div>

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react"; // Adicione useRef
-import { Button, TextField, Menu, MenuItem } from "@mui/material"; // Importa Menu e MenuItem
+import React, { useState, useRef } from "react";
+import { Button, TextField, Menu, MenuItem } from "@mui/material";
 import { useQuery, useMutation } from "@apollo/client";
 import {
   GET_TODO_LIST,
@@ -9,24 +9,24 @@ import {
 } from "../services/queries";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import ToDoList from "../components/ToDoList";
-import DeleteIcon from "@mui/icons-material/Delete"; // Importa o ícone de exclusão
-import { TOGGLE_COMPLETE_MUTATION } from "../services/queries"; // Importa a nova mutação
+import DeleteIcon from "@mui/icons-material/Delete";
+import { TOGGLE_COMPLETE_MUTATION } from "../services/queries";
 import { IconButton } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers"; // Certifique-se de instalar o pacote @mui/x-date-pickers
-import { TimePicker } from "@mui/x-date-pickers"; // Importa o TimePicker
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { TimePicker } from "@mui/x-date-pickers";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
-  const [priority, setPriority] = useState("low"); // Estado para a prioridade
-  const [filterValue, setFilterValue] = useState(""); // Novo estado para o filtro
+  const [priority, setPriority] = useState("low");
+  const [filterValue, setFilterValue] = useState("");
   const [editingItem, setEditingItem] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [dateTime, setDateTime] = useState(new Date()); // Estado para data e hora
-  const [showAudit, setShowAudit] = useState(false); // Estado inicial alterado para false
-  const [sortBy, setSortBy] = useState(null); // Estado para o critério de ordenação
-  const [deleteMenuAnchor, setDeleteMenuAnchor] = useState(null); // Estado para o menu
-  const inputRef = useRef(null); // Crie uma referência para o campo de texto
+  const [dateTime, setDateTime] = useState(new Date());
+  const [showAudit, setShowAudit] = useState(false);
+  const [sortBy, setSortBy] = useState(null);
+  const [deleteMenuAnchor, setDeleteMenuAnchor] = useState(null);
+  const inputRef = useRef(null);
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -51,12 +51,12 @@ export default function Home() {
   const sortedData = React.useMemo(() => {
     if (!data?.todoList) return [];
 
-    const priorityOrder = { high: 1, medium: 2, low: 3 }; // Define a ordem das prioridades
+    const priorityOrder = { high: 1, medium: 2, low: 3 }; // Define a ordem das prioridades.
 
     switch (sortBy) {
       case "priority":
         return [...data.todoList].sort(
-          (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority] // Ordena por alta, média e baixa
+          (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority] // Ordena por alta, média e baixa.
         );
       case "alphabetical":
         return [...data.todoList].sort((a, b) => a.name.localeCompare(b.name));
@@ -75,15 +75,15 @@ export default function Home() {
         variables: {
           name: inputValue,
           priority,
-          dateTime: dateTime ? new Date(dateTime).toISOString() : null, // Envia no formato ISO
+          dateTime: dateTime ? new Date(dateTime).toISOString() : null,
         },
       });
-      setInputValue(""); // Limpa o campo de texto
-      setPriority("low");
-      setDateTime(new Date()); // Reseta a data e hora para o padrão
-      inputRef.current.focus(); // Foca novamente no campo de texto
-      setErrorMessage(""); // Limpa mensagens de erro
-      refetch();
+      setInputValue(""); // Limpa o campo de texto.
+      setPriority("low"); //Reseta a prioridade para baixa.
+      setDateTime(new Date()); // Reseta a data e hora para o padrão.
+      inputRef.current.focus(); // Foca novamente no campo de texto.
+      setErrorMessage(""); // Limpa mensagens de erro.
+      refetch(); // Atualiza a lista depois de uma tarefa adicionada.
     } catch (error) {
       // Exibe a mensagem de erro retornada pelo backend
       setErrorMessage(error.message);
@@ -99,7 +99,7 @@ export default function Home() {
   const handleDeleteItem = async (id) => {
     try {
       await deleteItem({ variables: { id } });
-      refetch(); // Atualiza a lista de tarefas após excluir
+      refetch();
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -121,7 +121,7 @@ export default function Home() {
         variables: {
           id,
           name: editingText,
-          dateTime: updatedDateTime ? updatedDateTime.toISOString() : null, // Envia a data/hora atualizada
+          dateTime: updatedDateTime ? updatedDateTime.toISOString() : null,
         },
       });
       setEditingItem(null);
@@ -132,6 +132,7 @@ export default function Home() {
     }
   };
 
+  // As funcões abaixo definem o que faz cada tipo de exclusão "geral".
   const handleOpenDeleteMenu = (event) => {
     setDeleteMenuAnchor(event.currentTarget);
   };
@@ -189,10 +190,11 @@ export default function Home() {
     }
   };
 
+  //Marca ou desmarca a tarefa como feita.
   const handleToggleComplete = async (id) => {
     try {
       await toggleComplete({ variables: { id } });
-      refetch(); // Atualiza a lista após alternar o status
+      refetch();
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -211,10 +213,10 @@ export default function Home() {
     >
       {/* Logo da UNO */}
       <img
-        src="https://raw.githubusercontent.com/ZDjow/Uno-Solucoes/refs/heads/master/frontend/public/uno-logo.png" // Caminho para a logo
+        src="https://raw.githubusercontent.com/ZDjow/Uno-Solucoes/refs/heads/master/frontend/public/uno-logo.png"
         alt="Logo UNO"
         style={{
-          width: "100px", // Ajuste o tamanho da logo
+          width: "100px",
           marginBottom: "10px",
         }}
       />
@@ -226,7 +228,7 @@ export default function Home() {
           backgroundColor: "rgb(200, 200, 200)",
           padding: "10px",
           borderRadius: "5px",
-          position: "relative", // Permite posicionar os botões dentro do campo
+          position: "relative",
           marginBottom: "10px",
         }}
       >
@@ -237,10 +239,10 @@ export default function Home() {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              handleAddItem(); // Salva o item ao pressionar Enter
+              handleAddItem();
             }
           }}
-          inputRef={inputRef} // Associe a referência ao campo de texto
+          inputRef={inputRef}
           variant="standard"
           style={{
             width: "100%",
@@ -252,11 +254,11 @@ export default function Home() {
         <div
           style={{
             position: "absolute",
-            top: "24%", // Centraliza verticalmente em relação ao campo de texto
-            right: "10px", // Posiciona os botões no canto direito
-            transform: "translateY(-50%)", // Ajusta o alinhamento vertical
+            top: "24%",
+            right: "10px",
+            transform: "translateY(-50%)",
             display: "flex",
-            gap: "5px", // Espaçamento entre os botões
+            gap: "5px",
           }}
         >
           <IconButton
@@ -293,25 +295,25 @@ export default function Home() {
         <div
           style={{
             marginBottom: "10px",
-            display: "flex", // Alinha os componentes lado a lado
-            gap: "10px", // Espaçamento entre os componentes
+            display: "flex",
+            gap: "10px",
           }}
         >
-          {/* Seletor de Data */}
+          {/* Campo da data */}
           <DateTimePicker
             label=""
             value={dateTime}
             onChange={(newValue) => {
               if (newValue) {
-                setDateTime(newValue); // Atualize diretamente com o objeto Date
+                setDateTime(newValue);
               }
             }}
             slotProps={{
               textField: {
                 onKeyDown: (e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Evita o comportamento padrão
-                    handleAddItem(); // Salva o item ao pressionar Enter
+                    e.preventDefault();
+                    handleAddItem();
                   }
                 },
                 variant: "outlined",
@@ -319,31 +321,31 @@ export default function Home() {
                 InputProps: {
                   sx: {
                     "& .MuiSvgIcon-root": {
-                      color: "gray", // Define a cor cinza para o ícone do calendário
+                      color: "gray",
                     },
                   },
                 },
               },
             }}
-            views={["year", "month", "day"]} // Mostra apenas a seleção de data
-            format="dd/MM/yyyy" // Define o formato da data como DD/MM/YYYY
+            views={["year", "month", "day"]}
+            format="dd/MM/yyyy"
           />
 
-          {/* Seletor de Hora */}
+          {/* Campo da hora */}
           <TimePicker
             label=""
             value={dateTime}
             onChange={(newValue) => {
               if (newValue) {
-                setDateTime(newValue); // Atualize diretamente com o objeto Date
+                setDateTime(newValue);
               }
             }}
             slotProps={{
               textField: {
                 onKeyDown: (e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Evita o comportamento padrão
-                    handleAddItem(); // Salva o item ao pressionar Enter
+                    e.preventDefault();
+                    handleAddItem();
                   }
                 },
                 variant: "outlined",
@@ -351,14 +353,14 @@ export default function Home() {
                 InputProps: {
                   sx: {
                     "& .MuiSvgIcon-root": {
-                      color: "gray", // Define a cor cinza para o ícone do relógio
+                      color: "gray",
                     },
                   },
                 },
               },
             }}
-            ampm={false} // Desativa o formato AM/PM e usa o formato de 24 horas
-            format="HH:mm" // Define o formato da hora como 24 horas
+            ampm={false}
+            format="HH:mm"
           />
         </div>
 
@@ -394,15 +396,15 @@ export default function Home() {
               width: "8%",
               minWidth: "40px",
               color: "white",
-              backgroundColor: "gray", // Define o fundo cinza
+              backgroundColor: "gray",
               "&:hover": {
-                backgroundColor: "darkgray", // Fundo cinza mais escuro no hover
+                backgroundColor: "darkgray",
               },
             }}
             onClick={() => {
-              setInputValue(""); // Limpa o campo de texto
-              setErrorMessage(""); // Limpa mensagens de erro
-              refetch({ filter: { name: "" } }); // Reseta o filtro
+              setInputValue("");
+              setErrorMessage("");
+              refetch({ filter: { name: "" } });
             }}
           >
             <FilterAltOffIcon />
@@ -413,13 +415,13 @@ export default function Home() {
               width: "8%",
               minWidth: "40px",
               color: "white",
-              backgroundColor: "gray", // Define o fundo cinza
+              backgroundColor: "gray",
               "&:hover": {
-                backgroundColor: "darkgray", // Fundo cinza mais escuro no hover
+                backgroundColor: "darkgray",
               },
-              marginLeft: "10px", // Espaçamento entre os botões
+              marginLeft: "10px",
             }}
-            onClick={handleOpenDeleteMenu} // Abre o menu
+            onClick={handleOpenDeleteMenu}
           >
             <DeleteIcon />
           </Button>
@@ -429,8 +431,8 @@ export default function Home() {
             onClose={handleCloseDeleteMenu}
             sx={{
               "& .MuiPaper-root": {
-                backgroundColor: "rgb(200, 200, 200)", // Fundo do menu
-                color: "rgb(64, 64, 64)", // Cor do texto
+                backgroundColor: "rgb(200, 200, 200)",
+                color: "rgb(64, 64, 64)",
               },
             }}
           >
@@ -438,7 +440,7 @@ export default function Home() {
               onClick={() => handleDeleteByPriority("low")}
               sx={{
                 "&:hover": {
-                  backgroundColor: "rgb(150, 150, 150)", // Fundo ao passar o mouse
+                  backgroundColor: "rgb(150, 150, 150)",
                 },
               }}
             >
@@ -495,7 +497,7 @@ export default function Home() {
         editingItem={editingItem}
         editingText={editingText}
         setEditingText={setEditingText}
-        setEditingItem={setEditingItem} // Adicionado para corrigir o erro
+        setEditingItem={setEditingItem}
         error={errorMessage}
         onToggleComplete={handleToggleComplete}
         showAudit={showAudit}

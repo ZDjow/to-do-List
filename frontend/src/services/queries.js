@@ -2,7 +2,6 @@ import { gql } from "@apollo/client";
 
 export const GET_TODO_LIST = gql`
   query todoList($filter: ItemFilter) {
-    #Adicionado parâmetro para filtro opcional no retorno da consulta.
     todoList(filter: $filter) {
       id
       name

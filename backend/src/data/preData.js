@@ -1,16 +1,25 @@
 const TODO_LIST = [
   {
     id: 1,
-    name: "Magrass - Unidade Soledade",
+    name: "Peeling químico",
     completed: false,
     priority: "low",
     dateTime: new Date().toISOString(),
-    createdAt: new Date().toISOString(), // Adiciona data de criação
-    updatedAt: null, // Inicialmente nulo
+    createdAt: new Date().toISOString(),
+    updatedAt: null,
   },
   {
     id: 2,
-    name: "Espaço Laser - Unidade Catanduva",
+    name: "Depilação a laser",
+    completed: false,
+    priority: "high",
+    dateTime: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: null,
+  },
+  {
+    id: 3,
+    name: "Micropigmentação",
     completed: false,
     priority: "medium",
     dateTime: new Date().toISOString(),
@@ -19,6 +28,4 @@ const TODO_LIST = [
   },
 ];
 
-module.exports = {
-  TODO_LIST,
-};
+export default TODO_LIST;

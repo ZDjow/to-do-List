@@ -1,11 +1,11 @@
-const {
+import {
   addItem,
   updateItem,
   deleteItem,
   filterItems,
   toggleComplete,
   setPriority,
-} = require("../../business/toDoListRegras");
+} from "../../business/toDoListRegras.js";
 
 const resolvers = {
   Query: {
@@ -18,9 +18,9 @@ const resolvers = {
     updateItem: (_, { values: { id, name, dateTime } }) =>
       updateItem(id, name, dateTime),
     deleteItem: (_, { id }) => deleteItem(id),
-    toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para alternar o status
-    setPriority: (_, { id, priority }) => setPriority(id, priority), // Resolver para definir prioridade
+    toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para completar ou não tarefa.
+    setPriority: (_, { id, priority }) => setPriority(id, priority), // Resolver para definir prioridade.
   },
 };
 
-module.exports = resolvers;
+export default resolvers;

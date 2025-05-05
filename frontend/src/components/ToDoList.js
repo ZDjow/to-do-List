@@ -40,15 +40,17 @@ export default function ToDoList({
   };
 
   const handleShare = async () => {
-    // Seleciona apenas o elemento da lista de tarefas
-    const listElement = document.querySelector(".todo-list-items"); // Use uma classe ou id específico
+    const listElement = document.querySelector(".todo-list-items");
     if (!listElement) return;
+
+    // Oculta os botões antes de capturar a imagem
+    const buttons = listElement.querySelectorAll("button, .MuiIconButton-root");
+    buttons.forEach((button) => (button.style.display = "none"));
 
     try {
       const canvas = await html2canvas(listElement);
       const image = canvas.toDataURL("image/png");
 
-      // Compartilhar a imagem usando a API Web Share (se suportada)
       if (navigator.share) {
         await navigator.share({
           title: "Minha To-Do List",
@@ -60,7 +62,6 @@ export default function ToDoList({
           ],
         });
       } else {
-        // Caso o navegador não suporte, abre a imagem em uma nova aba
         const link = document.createElement("a");
         link.href = image;
         link.download = "todo-list.png";
@@ -68,12 +69,19 @@ export default function ToDoList({
       }
     } catch (error) {
       console.error("Erro ao compartilhar a lista:", error);
+    } finally {
+      // Restaura a visibilidade dos botões
+      buttons.forEach((button) => (button.style.display = ""));
     }
   };
 
   const handleDownloadImage = async () => {
     const listElement = document.querySelector(".todo-list-items");
     if (!listElement) return;
+
+    // Oculta os botões antes de capturar a imagem
+    const buttons = listElement.querySelectorAll("button, .MuiIconButton-root");
+    buttons.forEach((button) => (button.style.display = "none"));
 
     try {
       const canvas = await html2canvas(listElement);
@@ -85,6 +93,9 @@ export default function ToDoList({
       link.click();
     } catch (error) {
       console.error("Erro ao baixar a lista como imagem:", error);
+    } finally {
+      // Restaura a visibilidade dos botões
+      buttons.forEach((button) => (button.style.display = ""));
     }
   };
 

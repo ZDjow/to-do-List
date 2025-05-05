@@ -1,26 +1,19 @@
-version: "3.8"
-
 services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
+    container_name: back
     ports:
-      - "4000:4000"
-    environment:
-      - NODE_ENV=production
+      - 4000:4000
     volumes:
       - ./backend:/app
-    restart: unless-stopped
-
+    env_file:
+      - ./backend/.env
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
+    container_name: front
     ports:
-      - "3000:3000"
-    environment:
-      - REACT_APP_GRAPHQL_URI=http://localhost:4000/graphql
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-    restart: unless-stopped
+      - 3000:3000

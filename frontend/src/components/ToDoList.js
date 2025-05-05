@@ -91,20 +91,46 @@ export default function ToDoList({
   const handleExportCSV = () => {
     if (!data?.todoList?.length) return;
 
+    const translatePriority = (priority) => {
+      switch (priority) {
+        case "low":
+          return "Baixa";
+        case "medium":
+          return "Média";
+        case "high":
+          return "Alta";
+        default:
+          return priority;
+      }
+    };
+
+    const formatDateTime = (dateTime) => {
+      const date = new Date(dateTime);
+      return date.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    };
+
     const csvContent = [
       ["ID", "Nome", "Concluído", "Prioridade", "Data e Hora"],
       ...data.todoList.map((item) => [
         item.id,
         item.name,
         item.completed ? "Sim" : "Não",
-        item.priority,
-        item.dateTime,
+        translatePriority(item.priority), // Traduz a prioridade
+        formatDateTime(item.dateTime), // Formata a data e hora
       ]),
     ]
       .map((row) => row.join(","))
       .join("\n");
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["\uFEFF" + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    }); // Adiciona BOM para UTF-8
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "todo-list.csv";

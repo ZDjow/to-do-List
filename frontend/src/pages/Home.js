@@ -50,10 +50,13 @@ export default function Home() {
 
   const sortedData = React.useMemo(() => {
     if (!data?.todoList) return [];
+
+    const priorityOrder = { high: 1, medium: 2, low: 3 }; // Define a ordem das prioridades
+
     switch (sortBy) {
       case "priority":
-        return [...data.todoList].sort((a, b) =>
-          a.priority.localeCompare(b.priority)
+        return [...data.todoList].sort(
+          (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority] // Ordena por alta, média e baixa
         );
       case "alphabetical":
         return [...data.todoList].sort((a, b) => a.name.localeCompare(b.name));

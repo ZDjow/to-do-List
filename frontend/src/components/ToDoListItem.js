@@ -53,6 +53,22 @@ export default function ToDoListItem({
             },
           }}
         />
+        {/* Indicador de prioridade */}
+        <div
+          style={{
+            width: "13px",
+            height: "13px",
+            borderRadius: "50%",
+            backgroundColor: value.completed
+              ? "gray" // Cor cinza se a tarefa estiver concluída
+              : value.priority === "low"
+              ? "green"
+              : value.priority === "medium"
+              ? "yellow"
+              : "red",
+            marginRight: "10px",
+          }}
+        />
         {isEditing ? (
           <TextField
             value={editingText}
@@ -135,7 +151,7 @@ export default function ToDoListItem({
         </div>
       </div>
       {showAudit && (
-        <div style={{ marginTop: "5px", fontSize: "12px", color: "gray" }}>
+        <div style={{ fontSize: "12px", color: "gray" }}>
           Criado em:{" "}
           {new Date(value.createdAt).toLocaleString("pt-BR", {
             day: "2-digit",

@@ -5,7 +5,7 @@
  */
 function validateNameIsNotEmpty(name) {
   if (!name || name.trim() === "") {
-    throw new Error("Esse campo não pode ficar vazio.");
+    throw new Error("A tarefa precisa de uma descrição.");
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react"; // Adicione useRef
 import { Button, TextField, Menu, MenuItem } from "@mui/material"; // Importa Menu e MenuItem
 import { useQuery, useMutation } from "@apollo/client";
 import {
@@ -26,6 +26,7 @@ export default function Home() {
   const [showAudit, setShowAudit] = useState(false); // Estado inicial alterado para false
   const [sortBy, setSortBy] = useState(null); // Estado para o critério de ordenação
   const [deleteMenuAnchor, setDeleteMenuAnchor] = useState(null); // Estado para o menu
+  const inputRef = useRef(null); // Crie uma referência para o campo de texto
 
   const { data, refetch } = useQuery(GET_TODO_LIST, {
     variables: { filter: { name: filterValue } },
@@ -67,10 +68,6 @@ export default function Home() {
 
   const handleAddItem = async () => {
     try {
-      if (!inputValue.trim()) {
-        setErrorMessage("O nome da tarefa não pode estar vazio.");
-        return;
-      }
       await addItem({
         variables: {
           name: inputValue,
@@ -78,12 +75,14 @@ export default function Home() {
           dateTime: dateTime ? new Date(dateTime).toISOString() : null, // Envia no formato ISO
         },
       });
-      setInputValue("");
+      setInputValue(""); // Limpa o campo de texto
       setPriority("low");
       setDateTime(new Date()); // Reseta a data e hora para o padrão
-      setErrorMessage("");
+      inputRef.current.focus(); // Foca novamente no campo de texto
+      setErrorMessage(""); // Limpa mensagens de erro
       refetch();
     } catch (error) {
+      // Exibe a mensagem de erro retornada pelo backend
       setErrorMessage(error.message);
     }
   };
@@ -238,6 +237,7 @@ export default function Home() {
               handleAddItem(); // Salva o item ao pressionar Enter
             }
           }}
+          inputRef={inputRef} // Associe a referência ao campo de texto
           variant="standard"
           style={{
             width: "100%",
@@ -303,10 +303,14 @@ export default function Home() {
                 setDateTime(newValue); // Atualize diretamente com o objeto Date
               }
             }}
-            views={["year", "month", "day"]} // Mostra apenas a seleção de data
-            format="dd/MM/yyyy" // Define o formato da data como DD/MM/YYYY
             slotProps={{
               textField: {
+                onKeyDown: (e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Evita o comportamento padrão
+                    handleAddItem(); // Salva o item ao pressionar Enter
+                  }
+                },
                 variant: "outlined",
                 fullWidth: true,
                 InputProps: {
@@ -318,6 +322,8 @@ export default function Home() {
                 },
               },
             }}
+            views={["year", "month", "day"]} // Mostra apenas a seleção de data
+            format="dd/MM/yyyy" // Define o formato da data como DD/MM/YYYY
           />
 
           {/* Seletor de Hora */}
@@ -329,10 +335,14 @@ export default function Home() {
                 setDateTime(newValue); // Atualize diretamente com o objeto Date
               }
             }}
-            ampm={false} // Desativa o formato AM/PM e usa o formato de 24 horas
-            format="HH:mm" // Define o formato da hora como 24 horas
             slotProps={{
               textField: {
+                onKeyDown: (e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Evita o comportamento padrão
+                    handleAddItem(); // Salva o item ao pressionar Enter
+                  }
+                },
                 variant: "outlined",
                 fullWidth: true,
                 InputProps: {
@@ -344,6 +354,8 @@ export default function Home() {
                 },
               },
             }}
+            ampm={false} // Desativa o formato AM/PM e usa o formato de 24 horas
+            format="HH:mm" // Define o formato da hora como 24 horas
           />
         </div>
 

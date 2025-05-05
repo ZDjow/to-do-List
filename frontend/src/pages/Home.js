@@ -213,7 +213,7 @@ export default function Home() {
     >
       {/* Logo da UNO */}
       <img
-        src="https://raw.githubusercontent.com/ZDjow/Uno-Solucoes/refs/heads/master/frontend/public/uno-logo.png"
+        src="https://raw.githubusercontent.com/ZDjow/to-do-List/refs/heads/main/frontend/public/media/uno-logo.png"
         alt="Logo UNO"
         style={{
           width: "100px",

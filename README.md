@@ -13,8 +13,6 @@ O projeto utiliza as seguintes tecnologias:
 
 ## Como Rodar o Projeto
 
-### Sem Docker
-
 1. **Pré-requisitos**:
 
    - Certifique-se de ter o [Node.js](https://nodejs.org/en/download) instalado em sua máquina.
@@ -54,26 +52,6 @@ O projeto utiliza as seguintes tecnologias:
      yarn start
      ```
    - O frontend estará disponível em `http://localhost:3000`.
-
----
-
-### Com Docker
-
-1. **Pré-requisitos**:
-
-   - Certifique-se de ter o [Docker](https://www.docker.com/) e o [Docker Compose](https://docs.docker.com/compose/) instalados.
-
-2. **Configuração**:
-   - Navegue até a raiz do projeto:
-     ```bash
-     cd c:\Projetos\to-do-List
-     ```
-   - Execute o comando para iniciar os serviços:
-     ```bash
-     docker-compose up --build
-     ```
-   - O frontend estará disponível em `http://localhost:3000`.
-   - O backend estará disponível em `http://localhost:4000/graphql`.
 
 ---
 

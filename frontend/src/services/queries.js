@@ -32,9 +32,9 @@ export const DELETE_ITEM_MUTATION = gql`
   }
 `;
 
-export const TOGGLE_COMPLETE_MUTATION = gql`
-  mutation toggleComplete($id: Int!) {
-    toggleComplete(id: $id)
+export const ALTERAR_CONCLUSAO_MUTATION = gql`
+  mutation alterarConclusao($id: Int!) {
+    alterarConclusao(id: $id)
   }
 `;
 

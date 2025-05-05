@@ -10,7 +10,7 @@ import {
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import ToDoList from "../components/ToDoList";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { TOGGLE_COMPLETE_MUTATION } from "../services/queries";
+import { ALTERAR_CONCLUSAO_MUTATION } from "../services/queries";
 import { IconButton } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers";
@@ -23,7 +23,7 @@ export default function Home() {
   const [editingText, setEditingText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
-  const [showAudit, setShowAudit] = useState(false);
+  const [mostrarAuditoria, setAuditoria] = useState(false);
   const [sortBy, setSortBy] = useState(null);
   const [deleteMenuAnchor, setDeleteMenuAnchor] = useState(null);
   const inputRef = useRef(null);
@@ -44,7 +44,7 @@ export default function Home() {
     refetchQueries: [{ query: GET_TODO_LIST }],
   });
 
-  const [toggleComplete] = useMutation(TOGGLE_COMPLETE_MUTATION, {
+  const [alterarConclusao] = useMutation(ALTERAR_CONCLUSAO_MUTATION, {
     refetchQueries: [{ query: GET_TODO_LIST }],
   });
 
@@ -191,9 +191,9 @@ export default function Home() {
   };
 
   //Marca ou desmarca a tarefa como feita.
-  const handleToggleComplete = async (id) => {
+  const handleAlterarConclusao = async (id) => {
     try {
-      await toggleComplete({ variables: { id } });
+      await alterarConclusao({ variables: { id } });
       refetch();
     } catch (error) {
       setErrorMessage(error.message);
@@ -499,9 +499,9 @@ export default function Home() {
         setEditingText={setEditingText}
         setEditingItem={setEditingItem}
         error={errorMessage}
-        onToggleComplete={handleToggleComplete}
-        showAudit={showAudit}
-        setShowAudit={setShowAudit}
+        aoAlterarConclusao={handleAlterarConclusao}
+        mostrarAuditoria={mostrarAuditoria}
+        setAuditoria={setAuditoria}
         setSortBy={setSortBy}
       />
     </div>

@@ -1,10 +1,10 @@
-export function validateNameIsNotEmpty(name) {
+export function validaDescricaoVazia(name) {
   if (!name || name.trim() === "") {
     throw new Error("A tarefa precisa de uma descrição.");
   }
 }
 
-export function validateNameIsUnique(name, list, excludeId = null) {
+export function validaTarefaDuplicada(name, list, excludeId = null) {
   const nameExists = list.some(
     (item) =>
       item.id !== excludeId &&

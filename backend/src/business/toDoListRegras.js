@@ -1,7 +1,7 @@
 import TODO_LIST from "../data/preData.js";
 import {
-  validateNameIsNotEmpty,
-  validateNameIsUnique,
+  validaDescricaoVazia,
+  validaTarefaDuplicada,
 } from "../utils/validations.js";
 
 // Gera um número inteiro para utilizar de id.
@@ -11,8 +11,8 @@ function getRandomInt() {
 
 // Adiciona um item à lista de tarefas.
 export function addItem(name, priority = "low", dateTime) {
-  validateNameIsNotEmpty(name);
-  validateNameIsUnique(name, TODO_LIST);
+  validaDescricaoVazia(name);
+  validaTarefaDuplicada(name, TODO_LIST);
 
   // Verifica se a data e hora são válidos.
   const validDateTime =
@@ -38,8 +38,8 @@ export function addItem(name, priority = "low", dateTime) {
 
 // Atualiza um item da lista de tarefas.
 export function updateItem(id, name, dateTime) {
-  validateNameIsNotEmpty(name);
-  validateNameIsUnique(name, TODO_LIST, id);
+  validaDescricaoVazia(name);
+  validaTarefaDuplicada(name, TODO_LIST, id);
 
   const itemIndex = TODO_LIST.findIndex((item) => item.id === id);
 
@@ -91,7 +91,7 @@ export function filterItems(filter) {
 }
 
 // Marca ou desmarca tarefa como concluída.
-export function toggleComplete(id) {
+export function alterarConclusao(id) {
   const item = TODO_LIST.find((item) => item.id === id);
 
   if (!item) {

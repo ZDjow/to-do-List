@@ -19,8 +19,8 @@ export default function ToDoListItem({
   startEditing,
   saveEditing,
   onDelete,
-  onToggleComplete,
-  showAudit,
+  aoAlterarConclusao,
+  mostrarAuditoria,
 }) {
   return (
     <ListItem
@@ -39,7 +39,7 @@ export default function ToDoListItem({
       <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
         {/* Botão de completar tarefa */}
         <IconButton
-          onClick={() => onToggleComplete(value.id)}
+          onClick={() => aoAlterarConclusao(value.id)}
           sx={{
             border: "2px solid gray",
             borderRadius: "50%",
@@ -150,7 +150,7 @@ export default function ToDoListItem({
           </IconButton>
         </div>
       </div>
-      {showAudit && (
+      {mostrarAuditoria && (
         <div style={{ fontSize: "12px", color: "gray" }}>
           Criado em:{" "}
           {new Date(value.createdAt).toLocaleString("pt-BR", {

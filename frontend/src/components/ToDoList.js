@@ -25,9 +25,9 @@ export default function ToDoList({
   setEditingText,
   setEditingItem,
   error,
-  onToggleComplete,
-  showAudit,
-  setShowAudit,
+  aoAlterarConclusao,
+  mostrarAuditoria,
+  setAuditoria,
   setSortBy,
 }) {
   const [editingDateTime, setEditingDateTime] = React.useState(null);
@@ -54,7 +54,7 @@ export default function ToDoList({
       if (navigator.share) {
         await navigator.share({
           title: "Minha To-Do List",
-          text: "Confira minha lista de tarefas!",
+          text: "Lista de tarefas",
           files: [
             new File([await (await fetch(image)).blob()], "todo-list.png", {
               type: "image/png",
@@ -227,7 +227,7 @@ export default function ToDoList({
 
         {/* Botão de mostrar auditoria */}
         <IconButton
-          onClick={() => setShowAudit(!showAudit)}
+          onClick={() => setAuditoria(!mostrarAuditoria)}
           sx={{
             color: "rgb(125, 125, 125)",
             "&:hover": {
@@ -235,7 +235,7 @@ export default function ToDoList({
             },
           }}
         >
-          {showAudit ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          {mostrarAuditoria ? <VisibilityIcon /> : <VisibilityOffIcon />}
         </IconButton>
       </div>
 
@@ -271,8 +271,8 @@ export default function ToDoList({
                 editingDateTime={editingDateTime}
                 setEditingDateTime={setEditingDateTime}
                 onDelete={onDelete}
-                onToggleComplete={onToggleComplete}
-                showAudit={showAudit}
+                aoAlterarConclusao={aoAlterarConclusao}
+                mostrarAuditoria={mostrarAuditoria}
                 startEditing={handleStartEditing}
                 saveEditing={handleSaveEditing}
               />

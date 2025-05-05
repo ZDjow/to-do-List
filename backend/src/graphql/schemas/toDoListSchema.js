@@ -29,7 +29,7 @@ const typeDefs = `#graphql
     addItem(values: ItemInput): Boolean
     updateItem(values: ItemInput): Boolean
     deleteItem(id: Int!): Boolean
-    toggleComplete(id: Int!): Boolean # Completar ou não tarefa.
+    alterarConclusao(id: Int!): Boolean # Completar ou não tarefa.
     setPriority(id: Int!, priority: String!): Boolean # Definir prioridade.
   }
 `;

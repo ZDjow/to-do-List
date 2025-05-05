@@ -46,9 +46,10 @@ function addItem(name, priority = "low", dateTime) {
  * Atualiza um item da lista de tarefas.
  * @param {number} id - ID do item a ser atualizado.
  * @param {string} name - Novo nome do item.
+ * @param {string} dateTime - Nova data e hora do item.
  * @returns {boolean} - Retorna true se o item for atualizado com sucesso.
  */
-function updateItem(id, name) {
+function updateItem(id, name, dateTime) {
   validateNameIsNotEmpty(name);
   validateNameIsUnique(name, TODO_LIST, id);
 
@@ -58,8 +59,18 @@ function updateItem(id, name) {
   }
 
   TODO_LIST[itemIndex].name = name;
+
+  // Valida e atualiza a data e hora, se fornecida
+  if (dateTime && !isNaN(new Date(dateTime).getTime())) {
+    TODO_LIST[itemIndex].dateTime = new Date(dateTime).toISOString();
+  } else {
+    console.warn(`Data/hora inválida para o item com ID ${id}.`);
+  }
+
   TODO_LIST[itemIndex].updatedAt = new Date().toISOString(); // Atualiza data de modificação
-  console.log(`Tarefa com o ID ${id} atualizada para: ${name}`);
+  console.log(
+    `Tarefa com o ID ${id} atualizada para: ${name}, ${TODO_LIST[itemIndex].dateTime}`
+  );
   return true;
 }
 

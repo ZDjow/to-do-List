@@ -1,5 +1,5 @@
 import React from "react";
-import { List, IconButton, Typography, Button } from "@mui/material"; // Importando Button
+import { List, IconButton, Typography } from "@mui/material"; // Importando Button
 import ToDoListItem from "./ToDoListItem";
 import html2canvas from "html2canvas"; // Importa a biblioteca para capturar a tela
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -8,7 +8,6 @@ import SortIcon from "@mui/icons-material/Sort"; // Ícone para prioridade (linh
 import TimelapseIcon from "@mui/icons-material/Timelapse"; // Ícone para horas
 import ShareIcon from "@mui/icons-material/Share"; // Importa o ícone de compartilhamento
 import DownloadIcon from "@mui/icons-material/Download"; // Ícone para download
-import TableChartIcon from "@mui/icons-material/TableChart"; // Ícone para CSV
 import DescriptionIcon from "@mui/icons-material/Description"; // Ícone de folha com riscos
 
 // Subcomponente para exibir mensagens de erro
@@ -25,12 +24,21 @@ export default function ToDoList({
   editingItem,
   editingText,
   setEditingText,
+  setEditingItem,
   error,
   onToggleComplete,
   showAudit,
   setShowAudit,
   setSortBy,
 }) {
+  const [editingDateTime, setEditingDateTime] = React.useState(null);
+
+  const handleStartEditing = (id, currentName, currentDateTime) => {
+    setEditingItem(id);
+    setEditingText(currentName);
+    setEditingDateTime(currentDateTime ? new Date(currentDateTime) : null); // Converte para objeto Date
+  };
+
   const handleShare = async () => {
     // Seleciona apenas o elemento da lista de tarefas
     const listElement = document.querySelector(".todo-list-items"); // Use uma classe ou id específico
@@ -103,6 +111,22 @@ export default function ToDoList({
     link.click();
   };
 
+  const handleSaveEditing = async (id) => {
+    try {
+      if (!editingText.trim()) {
+        console.error("O nome da tarefa não pode estar vazio.");
+        return;
+      }
+
+      await saveEditing(id, editingDateTime); // Passa a data/hora atualizada
+      setEditingItem(null);
+      setEditingText("");
+      setEditingDateTime(null);
+    } catch (error) {
+      console.error("Erro ao salvar a edição:", error);
+    }
+  };
+
   return (
     <div
       id="todo-list-container" // Adiciona um ID para capturar a lista
@@ -170,7 +194,7 @@ export default function ToDoList({
           sx={{
             color: "rgb(125, 125, 125)",
             "&:hover": {
-              color: "rgb(64, 64, 69)",
+              color: "rgb(64, 64, 64)",
             },
           }}
         >
@@ -207,11 +231,13 @@ export default function ToDoList({
                 isEditing={isEditing}
                 editingText={editingText}
                 setEditingText={setEditingText}
-                startEditing={startEditing}
-                saveEditing={saveEditing}
+                editingDateTime={editingDateTime}
+                setEditingDateTime={setEditingDateTime}
                 onDelete={onDelete}
                 onToggleComplete={onToggleComplete}
                 showAudit={showAudit}
+                startEditing={handleStartEditing}
+                saveEditing={handleSaveEditing} // Passa a função corrigida
               />
             );
           })

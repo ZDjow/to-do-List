@@ -109,17 +109,22 @@ export default function Home() {
     setErrorMessage("");
   };
 
-  const handleSaveEditing = async (id) => {
+  const handleSaveEditing = async (id, updatedDateTime) => {
     try {
       if (!editingText.trim()) {
         setErrorMessage("O nome da tarefa não pode estar vazio.");
         return;
       }
-      await updateItem({ variables: { id, name: editingText } });
+      await updateItem({
+        variables: {
+          id,
+          name: editingText,
+          dateTime: updatedDateTime ? updatedDateTime.toISOString() : null, // Envia a data/hora atualizada
+        },
+      });
       setEditingItem(null);
       setEditingText("");
       setErrorMessage("");
-      refetch();
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -475,11 +480,12 @@ export default function Home() {
         editingItem={editingItem}
         editingText={editingText}
         setEditingText={setEditingText}
+        setEditingItem={setEditingItem} // Adicionado para corrigir o erro
         error={errorMessage}
-        onToggleComplete={handleToggleComplete} // Passa a função para alternar o status
-        showAudit={showAudit} // Passa o estado de visibilidade
-        setShowAudit={setShowAudit} // Passa a função para alternar visibilidade
-        setSortBy={setSortBy} // Passa a função para definir o critério de ordenação
+        onToggleComplete={handleToggleComplete}
+        showAudit={showAudit}
+        setShowAudit={setShowAudit}
+        setSortBy={setSortBy}
       />
     </div>
   );

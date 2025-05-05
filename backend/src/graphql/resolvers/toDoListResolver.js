@@ -15,7 +15,8 @@ const resolvers = {
   Mutation: {
     addItem: (_, { values: { name, priority, dateTime } }) =>
       addItem(name, priority, dateTime),
-    updateItem: (_, { values: { id, name } }) => updateItem(id, name),
+    updateItem: (_, { values: { id, name, dateTime } }) =>
+      updateItem(id, name, dateTime),
     deleteItem: (_, { id }) => deleteItem(id),
     toggleComplete: (_, { id }) => toggleComplete(id), // Resolver para alternar o status
     setPriority: (_, { id, priority }) => setPriority(id, priority), // Resolver para definir prioridade

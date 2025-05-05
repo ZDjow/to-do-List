@@ -22,8 +22,8 @@ export const ADD_ITEM_MUTATION = gql`
 `;
 
 export const UPDATE_ITEM_MUTATION = gql`
-  mutation UpdateItem($id: Int!, $name: String!) {
-    updateItem(values: { id: $id, name: $name })
+  mutation UpdateItem($id: Int!, $name: String!, $dateTime: String) {
+    updateItem(values: { id: $id, name: $name, dateTime: $dateTime })
   }
 `;
 

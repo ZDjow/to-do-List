@@ -1,26 +1,27 @@
 import React from "react";
-import { ListItem, ListItemText, IconButton, TextField } from "@mui/material";
+import {
+  ListItem,
+  ListItemText,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 export default function ToDoListItem({
   value,
   isEditing,
   editingText,
   setEditingText,
+  editingDateTime,
+  setEditingDateTime,
   startEditing,
   saveEditing,
   onDelete,
-  onToggleComplete, // Função para alternar o status
-  showAudit, // Passa a visibilidade da auditoria
+  onToggleComplete,
+  showAudit,
 }) {
-  const now = new Date();
-  const taskDateTime = new Date(value.dateTime);
-  const isDatePast = taskDateTime.toDateString() < now.toDateString();
-  const isTimePast =
-    isDatePast || // Se a data já passou, o horário também deve ficar vermelho
-    (taskDateTime.toDateString() === now.toDateString() &&
-      taskDateTime.getTime() < now.getTime());
-
   return (
     <ListItem
       disablePadding
@@ -28,51 +29,27 @@ export default function ToDoListItem({
         borderRadius: "5px",
         marginTop: "5px",
         marginBottom: "5px",
-        textDecoration: value.completed ? "line-through" : "none", // Aplica o estilo riscado
-        color: value.completed ? "gray" : "inherit", // Altera a cor do texto se concluído
-        display: "flex", // Alinha os itens horizontalmente
-        justifyContent: "space-between", // Espaça o conteúdo
-        alignItems: "center", // Centraliza verticalmente
+        textDecoration: value.completed ? "line-through" : "none",
+        color: value.completed ? "gray" : "inherit",
+        display: "flex",
+        flexDirection: "column", // Alinha os elementos verticalmente
+        alignItems: "flex-start", // Alinha os itens à esquerda
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
         {/* Botão de alternar conclusão */}
         <IconButton
           onClick={() => onToggleComplete(value.id)}
           sx={{
-            border: "2px solid gray", // Borda da bolinha
-            borderRadius: "50%", // Forma circular
+            border: "2px solid gray",
+            borderRadius: "50%",
             width: "13px",
             height: "13px",
             padding: "0px",
             marginRight: "7px",
-            backgroundColor: value.completed ? "gray" : "transparent", // Fundo preenchido se concluído
+            backgroundColor: value.completed ? "gray" : "transparent",
             "&:hover": {
-              backgroundColor: value.completed ? "darkgray" : "lightgray", // Efeito hover
-            },
-          }}
-        />
-        <IconButton
-          sx={{
-            width: "13px",
-            height: "13px",
-            padding: "0px",
-            marginRight: "7px",
-            backgroundColor: value.completed
-              ? "gray" // Fica cinza se a tarefa estiver concluída
-              : value.priority === "low"
-              ? "green"
-              : value.priority === "medium"
-              ? "yellow"
-              : "red", // Define a cor de fundo com base na prioridade
-            "&:hover": {
-              backgroundColor: value.completed
-                ? "darkgray" // Efeito hover para o estado concluído
-                : value.priority === "low"
-                ? "lightgreen"
-                : value.priority === "medium"
-                ? "lightyellow"
-                : "lightcoral", // Efeito hover para as prioridades
+              backgroundColor: value.completed ? "darkgray" : "lightgray",
             },
           }}
         />
@@ -80,124 +57,107 @@ export default function ToDoListItem({
           <TextField
             value={editingText}
             onChange={(e) => setEditingText(e.target.value)}
-            onBlur={() => saveEditing(value.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                saveEditing(value.id);
-                e.target.blur();
+                saveEditing(value.id, editingDateTime); // Passa a data/hora ao salvar
               } else if (e.key === "Escape") {
-                e.target.blur();
+                startEditing(null); // Cancela a edição
               }
             }}
             autoFocus
+            sx={{ marginRight: "10px", flex: 1 }}
           />
         ) : (
-          <ListItemText
-            primary={
-              <>
-                {value?.name}
-                {showAudit && (
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "gray",
-                      marginTop: "5px",
-                    }}
-                  >
-                    {value?.createdAt && (
-                      <div>
-                        Agendado em{" "}
-                        {new Date(value.createdAt).toLocaleString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </div>
-                    )}
-                    {value?.updatedAt && (
-                      <div>
-                        Alterado em{" "}
-                        {new Date(value.updatedAt).toLocaleString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            }
-            sx={{ marginRight: "auto" }} // Garante que o texto ocupe o espaço restante
-          />
+          <ListItemText primary={value.name} sx={{ marginRight: "auto" }} />
         )}
+        {isEditing ? (
+          <div
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                saveEditing(value.id, editingText, editingDateTime); // Salva a edição ao pressionar Enter
+              } else if (e.key === "Escape") {
+                startEditing(null); // Cancela a edição ao pressionar Escape
+              }
+            }}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <DateTimePicker
+              value={editingDateTime}
+              onChange={(newValue) => setEditingDateTime(newValue)}
+              ampm={false} // Formato 24 horas
+              format="dd/MM/yyyy HH:mm" // Formato de exibição
+              sx={{ marginRight: "10px", width: "150px" }}
+            />
+          </div>
+        ) : (
+          <Typography
+            variant="body2"
+            sx={{
+              marginRight: "10px",
+              color: "gray",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {new Date(value.dateTime).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}{" "}
+            {new Date(value.dateTime).toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Typography>
+        )}
+        <div style={{ display: "flex", gap: "5px", marginLeft: "10px" }}>
+          <IconButton
+            onClick={() => startEditing(value.id, value.name, value.dateTime)}
+            sx={{
+              color: "gray",
+              "&:hover": {
+                color: "darkgray",
+              },
+            }}
+          >
+            <Edit />
+          </IconButton>
+          <IconButton
+            onClick={() => onDelete(value.id)}
+            sx={{
+              color: "gray",
+              "&:hover": {
+                color: "darkgray",
+              },
+            }}
+          >
+            <Delete />
+          </IconButton>
+        </div>
       </div>
-
-      {/* Data e Hora */}
-      <div
-        style={{
-          textAlign: "right",
-          minWidth: "150px",
-          marginLeft: "auto", // Adiciona margem automática para empurrar o conteúdo à direita
-        }}
-      >
-        {value?.dateTime && !isNaN(new Date(value.dateTime).getTime()) ? (
-          <span>
-            <span
-              style={{
-                color: isDatePast ? "red" : "inherit", // Vermelho se a data já passou
-              }}
-            >
-              {new Date(value.dateTime).toLocaleDateString("pt-BR", {
+      {showAudit && (
+        <div style={{ marginTop: "5px", fontSize: "12px", color: "gray" }}>
+          Criado em:{" "}
+          {new Date(value.createdAt).toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+          {value.updatedAt && (
+            <>
+              {" | "}Atualizado em:{" "}
+              {new Date(value.updatedAt).toLocaleString("pt-BR", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
-              })}
-            </span>{" "}
-            <span
-              style={{
-                color: isTimePast ? "red" : "inherit", // Vermelho se o horário já passou
-              }}
-            >
-              {new Date(value.dateTime).toLocaleTimeString("pt-BR", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
-            </span>
-          </span>
-        ) : (
-          <span>Data inválida</span>
-        )}
-      </div>
-
-      <div style={{ display: "flex", gap: "5px", marginLeft: "10px" }}>
-        <IconButton
-          onClick={() => startEditing(value.id, value.name)}
-          sx={{
-            color: "gray", // Define a cor cinza
-            "&:hover": {
-              color: "darkgray", // Cor ao passar o mouse
-            },
-          }}
-        >
-          <Edit />
-        </IconButton>
-        <IconButton
-          onClick={() => onDelete(value.id)}
-          sx={{
-            color: "gray", // Define a cor cinza
-            "&:hover": {
-              color: "darkgray", // Cor ao passar o mouse
-            },
-          }}
-        >
-          <Delete />
-        </IconButton>
-      </div>
+            </>
+          )}
+        </div>
+      )}
     </ListItem>
   );
 }

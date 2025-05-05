@@ -55,10 +55,5 @@ O projeto utiliza as seguintes tecnologias:
 
 ---
 
-## Variáveis de Ambiente
-
-Certifique-se de configurar a variável de ambiente no frontend para que ele consiga se comunicar com o backend. No arquivo `.env` do frontend, adicione:
-REACT_APP_GRAPHQL_URI=http://localhost:4000/graphql
-
 Atenciosamente,  
 Djonathan Zuchi.
